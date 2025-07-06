@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DS Exam</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <!-- Font Awesome for icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <!-- Google Fonts - Inter (for consistent look) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Universal box-sizing and font */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Inter", Arial, sans-serif; /* Using Inter font */
+        background-color: #f8f9fa; /* Lighter background */
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        overflow-x: hidden; /* Prevent horizontal scroll */
+        padding-top: 80px; /* Adjust for fixed navbar height when visible */
+      }
+      /* Navbar styles (copied from instructor_dashboard.html and adapted for consistency) */
+      .navbar {
+        background-color: #003366 !important; /* Dark blue background */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15); /* Subtle shadow */
+        padding: 1rem 0; /* Vertical padding */
+        position: fixed; /* Make it fixed at the top */
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000; /* Ensure it's above other content */
+      }
+      .navbar-brand {
+        font-weight: 700;
+        color: #ffffff !important; /* White text for brand */
+        font-size: 1.8em;
+        display: flex;
+        align-items: center;
+        gap: 10px; /* Space between logo and text */
+      }
+      .navbar-brand img {
+        /* Filter removed to make logo visible as requested previously */
+      }
+      .navbar-nav .nav-link {
+        font-weight: 500;
+        color: #ffffff !important; /* White text for nav links */
+        margin-right: 15px;
+        padding: 8px 15px;
+        border-radius: 8px; /* Rounded corners for nav links */
+        transition: background-color 0.3s ease;
+      }
+      .navbar-nav .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+        color: #ffffff !important;
+      }
+      .navbar-nav .nav-link.active {
+        background-color: rgba(255, 255, 255, 0.2); /* Highlight active link */
+      }
+      .navbar-toggler {
+        border-color: rgba(255, 255, 255, 0.5); /* White border for toggler */
+      }
+      .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); /* White toggler icon */
+      }
+      .btn-outline-light-custom {
+        color: #ffffff;
+        border-color: #ffffff;
+        border-radius: 8px;
+        padding: 8px 20px;
+        font-weight: 600;
+        transition: background-color 0.3s ease, color 0.3s ease;
+      }
+      .btn-outline-light-custom:hover {
+        background-color: #ffffff;
+        color: #003366; /* Dark text on hover */
+      }
+
+      /* Dropdown specific styles to ensure visibility on dark navbar */
+      .dropdown-menu {
+        background-color: #004488; /* Slightly lighter dark blue for dropdown */
+        border: none;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        border-radius: 8px;
+      }
+      .dropdown-item {
+        color: #ffffff; /* White text for dropdown items */
+        padding: 10px 20px;
+        transition: background-color 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .dropdown-item:hover,
+      .dropdown-item:focus {
+        background-color: rgba(255, 255, 255, 0.15); /* Light hover effect */
+        color: #ffffff;
+      }
+
+      /* User Profile Picture in Navbar */
+      .user-profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #fff;
+        margin-left: 20px;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+      .user-profile-pic:hover {
+        transform: scale(1.05);
+      }
+
+      /* Main content containers */
+      .instructions-box,
+      .exam-section {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 1000px; /* Increased max-width for exam sections */
+        margin: 20px auto; /* Centered margin */
+        width: 95%; /* Responsive width */
+      }
+      .instructions-box {
+        text-align: center;
+      }
+
+      .instructions-box ul {
+        text-align: left; /* Align list items to the left within the centered box */
+        max-width: 800px; /* Constrain list width for readability */
+        margin: 0 auto 20px auto; /* Center the list within the box */
+        list-style-type: decimal; /* Use numbers for instructions */
+        padding-left: 25px; /* Indent list for numbers */
+      }
+
+      .instructions-box ul li {
+        margin-bottom: 10px;
+        line-height: 1.5;
+        color: #333;
+      }
+
+      .question {
+        background: white;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+      .timer {
+        font-size: 24px;
+        font-weight: bold;
+        color: #003366;
+        text-align: center;
+        margin-bottom: 20px;
+        padding: 10px;
+        background-color: #e9ecef;
+        border-radius: 8px;
+      }
+      #proctoringStatus {
+        text-align: center;
+        margin-bottom: 15px;
+        font-weight: bold;
+        color: #666;
+      }
+
+      /* Camera Styling - Adjusted Position and Size */
+      #cameraBox {
+        position: fixed;
+        top: 20px; /* Position at the top */
+        right: 20px; /* Align to the right edge */
+        width: 320px; /* Made a bit bigger */
+        height: 240px; /* Made a bit bigger (4:3 aspect ratio) */
+        border: 3px solid #003366; /* Thicker border for visibility */
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+        display: none; /* Hide the camera box initially */
+        z-index: 500; /* Ensure it's above other content but below modals */
+      }
+
+      #cameraBox video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Custom Message Box Styling */
+      .message-box-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+      .message-box-content {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 350px;
+        width: 90%;
+      }
+      .message-box-content h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      .message-box-content p {
+        margin-bottom: 20px;
+        color: #666;
+      }
+      .message-box-content button {
+        background: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+      }
+      .message-box-content button:hover {
+        background: #0056b3;
+      }
+
+      /* Post-Submit Choice Modal */
+      #postSubmitChoiceModal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        justify-content: center;
+        align-items: center;
+        z-index: 10000; /* Higher than other modals */
+      }
+      #postSubmitChoiceModal .modal-content {
+        max-width: 450px;
+        padding: 30px;
+        background: white; /* Ensure background for modal content */
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+      }
+      #postSubmitChoiceModal h3 {
+        margin-bottom: 25px;
+        color: #333;
+      }
+      #postSubmitChoiceModal button {
+        background: #28a745; /* Green for View Results */
+        margin: 0 10px;
+        padding: 12px 25px;
+        font-size: 1.1em;
+        border-radius: 8px; /* Rounded corners */
+        border: none;
+        color: white;
+      }
+      #postSubmitChoiceModal button:last-of-type {
+        background: #6c757d; /* Grey for Go to Home */
+      }
+      #postSubmitChoiceModal button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+      /* Loading indicator */
+      .loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.7);
+        justify-content: center;
+        align-items: center;
+        z-index: 3000;
+      }
+      .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border-left-color: #09f;
+        animation: spin 1s ease infinite;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Fullscreen exit modal styles */
+      #exitFullscreenModal .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        width: 400px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
+      #exitFullscreenModal button {
+        background: #dc3545; /* Red for OK (exit) */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin-right: 10px;
+        transition: background-color 0.3s ease;
+      }
+      #exitFullscreenModal button:hover {
+        background: #c82333;
+      }
+      #exitFullscreenModal button:last-of-type {
+        background: #28a745; /* Green for Cancel (stay) */
+      }
+      #exitFullscreenModal button:last-of-type:hover {
+        background: #218838;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        body {
+          padding-top: 70px; /* Adjust for smaller navbar on mobile */
+        }
+        .navbar {
+          padding: 0.5rem 0;
+        }
+        .user-profile-pic {
+          margin-left: 10px;
+        }
+        #cameraBox {
+          width: 240px; /* Smaller on mobile */
+          height: 180px; /* Smaller on mobile */
+          top: 10px; /* Closer to top */
+        }
+        .instructions-box,
+        .exam-section {
+          padding: 15px;
+          margin: 10px auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar (Copied and adapted from home.html/instructor_dashboard.html) -->
+    <nav class="navbar navbar-expand-lg navbar-dark" id="mainNavbar">
+      <div class="container-fluid px-4">
+        <a class="navbar-brand" href="index.html">
+          <!-- Make sure this path is correct for your logo -->
+          <img
+            src="D:/ForthYear/SmartProctor-GraduationProject/Frontend/images/WebLogo.png"
+            alt="Smart Proctor Logo"
+            class="rounded-circle"
+            style="width: 50px; height: 50px"
+          />
+          <span>Smart Proctor</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto align-items-center">
+            <!-- Navigation Menu as Dropdown -->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdownMenu"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <i class="fas fa-bars me-2"></i>Menu
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenu">
+                <li>
+                  <a class="dropdown-item" href="home.html"
+                    ><i class="fas fa-home me-2"></i>Home</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item active" href="available_exams.html"
+                    ><i class="fas fa-book me-2"></i>Available Exams</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="grades.html"
+                    ><i class="fas fa-chart-bar me-2"></i>Grades</a
+                  >
+                </li>
+                <li>
+                  <a class="dropdown-item" href="register.html"
+                    ><i class="fas fa-user-plus me-2"></i>Register</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li class="nav-item">
+              <!-- User Profile Picture -->
+              <a href="profile.html">
+                <img
+                  id="userProfilePic"
+                  src="images/Lojain .jpg"
+                  alt="User Profile"
+                  class="user-profile-pic"
+                />
+              </a>
+            </li>
+            <li class="nav-item">
+              <!-- Log Out button -->
+              <a
+                class="btn btn-outline-light-custom ms-lg-3"
+                href="#"
+                id="logoutButton"
+              >
+                <i class="fas fa-sign-out-alt me-2"></i>Log Out
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="instructions-box" id="instructionsBox">
+      <h3>Exam Instructions</h3>
+      <ul>
+        <li>The exam duration is 1 hour.</li>
+        <li>Do not refresh or close the browser during the exam.</li>
+        <li>Ensure your internet connection is stable throughout the exam.</li>
+        <li>
+          Answer all questions carefully. You cannot return to previous
+          questions after submitting.
+        </li>
+        <li>
+          Your camera and microphone will be used for proctoring throughout the
+          exam. Please ensure they are enabled and functioning.
+        </li>
+        <li>
+          Do not use any external resources, notes, or electronic devices during
+          the exam.
+        </li>
+        <li>
+          Avoid talking, looking away from the screen frequently, or having
+          other people in the room.
+        </li>
+        <li>
+          Any suspicious activity detected by the proctoring system may result
+          in your exam being invalidated.
+        </li>
+        <li>
+          Do not try to leave fullscreen mode or switch tabs/applications, as
+          this will end your exam.
+        </li>
+        <li>
+          In case of technical issues, please contact your instructor
+          immediately.
+        </li>
+      </ul>
+      <button class="btn btn-primary" onclick="startExam()">
+        OK, Start Exam
+      </button>
+    </div>
+
+    <div class="exam-section" id="examSection">
+      <div class="timer" id="timer">Time Left: 01:00:00</div>
+      <div
+        id="proctoringStatus"
+        style="
+          text-align: center;
+          margin-bottom: 15px;
+          font-weight: bold;
+          color: #666;
+        "
+      >
+        Proctoring: Initializing...
+      </div>
+
+      <form id="examForm">
+        <!-- Dynamic questions will be loaded here -->
+        <div id="dynamicQuestionsContainer">
+          <p id="noQuestionsMessage" style="text-align: center; padding: 20px">
+            No questions available. Please contact your instructor.
+          </p>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-success"
+          onclick="submitExam(event)"
+        >
+          Submit Exam
+        </button>
+      </form>
+    </div>
+
+    <!-- The Exam Results Section is now moved to score.html -->
+
+    <!-- Camera Box -->
+    <div id="cameraBox">
+      <video id="studentCamera" autoplay></video>
+    </div>
+
+    <!-- Custom Message Box for alerts (generic for various messages) -->
+    <div class="message-box-overlay" id="customMessageBoxOverlay">
+      <div class="message-box-content">
+        <h3 id="customMessageBoxTitle"></h3>
+        <p id="customMessageBoxText"></p>
+        <button onclick="closeCustomMessageBox()">OK</button>
+      </div>
+    </div>
+
+    <!-- Original Message Box (kept for the success message if needed, but its display is controlled by submitExam) -->
+    <div
+      id="messageBox"
+      style="
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #d4edda;
+        color: #155724;
+        padding: 20px 30px;
+        border: 1px solid #c3e6cb;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        font-size: 1.2em;
+        z-index: 10000;
+      "
+    >
+      Your exam submitted successfully.
+    </div>
+
+    <!-- New Post-Submit Choice Modal -->
+    <div class="message-box-overlay" id="postSubmitChoiceModal">
+      <div class="modal-content">
+        <h3>Exam Submitted! What would you like to do?</h3>
+        <button class="btn" onclick="viewResults()">View Results</button>
+        <button class="btn" onclick="goToHomePage()">Go to Home Page</button>
+      </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="spinner"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let detectionInterval;
+      let mediaStream;
+      let audioContext = null;
+      let audioProcessor = null;
+      let mediaStreamSource = null;
+      let audioGainNode = null;
+      let audioDataBuffer = [];
+      let audioSampleRate = 0;
+      let questionsLoaded = []; // Array to store loaded questions from localStorage
+      let studentAnswersGlobal = {}; // To store answers collected during submission
+      let proctoringDetectionLogs = []; // Array to store summarized detection events
+
+      const GATEWAY_URL = "http://127.0.0.1:5000"; // Define your proctoring gateway URL
+      const GATEWAY_TEXT_DETECTION_URL =
+        "http://127.0.0.1:5000/process_text_detection"; // Frontend sends text to Gateway's text detection endpoint
+      const SEND_FRAME_INTERVAL_MS = 1000; // Send frames every 1 second (1 frame per second)
+      let timerIntervalId; // To store the interval ID for the timer
+
+      // --- Custom Message Box Functions (replacing native alerts) ---
+      function showCustomMessageBox(title, message) {
+        document.getElementById("customMessageBoxTitle").innerText = title;
+        document.getElementById("customMessageBoxText").innerText = message;
+        document.getElementById("customMessageBoxOverlay").style.display =
+          "flex";
+      }
+
+      function closeCustomMessageBox() {
+        document.getElementById("customMessageBoxOverlay").style.display =
+          "none";
+      }
+
+      /**
+       * Shows the loading overlay.
+       */
+      function showLoading() {
+        document.getElementById("loadingOverlay").style.display = "flex";
+      }
+
+      /**
+       * Hides the loading overlay.
+       */
+      function hideLoading() {
+        document.getElementById("loadingOverlay").style.display = "none";
+      }
+
+      // --- Audio Encoding Helper Function ---
+      // Helper to encode Float32Array to WAV format bytes
+      function encodeWAV(samples, sampleRate) {
+        const buffer = new ArrayBuffer(44 + samples.length * 2); // 44 bytes for WAV header + 2 bytes per sample (16-bit)
+        const view = new DataView(buffer);
+
+        /* RIFF identifier */
+        writeString(view, 0, "RIFF");
+        /* file length */
+        view.setUint32(4, 36 + samples.length * 2, true);
+        /* RIFF type */
+        writeString(view, 8, "WAVE");
+        /* format chunk identifier */
+        view.setUint32(12, 16, true);
+        /* format chunk length */
+        view.setUint32(16, 16, true);
+        /* sample format (raw) */
+        view.setUint16(20, 1, true);
+        /* channel count */
+        view.setUint16(22, 1, true);
+        /* sample rate */
+        view.setUint32(24, sampleRate, true);
+        /* byte rate (sample rate * block align) */
+        view.setUint32(28, sampleRate * 2, true);
+        /* block align (channel count * bytes per sample) */
+        view.setUint16(32, 2, true);
+        /* bits per sample */
+        view.setUint16(34, 16, true);
+        /* data chunk identifier */
+        writeString(view, 36, "data");
+        /* data chunk length */
+        view.setUint32(40, samples.length * 2, true);
+
+        floatTo16BitPCM(view, 44, samples);
+
+        return new Uint8Array(buffer);
+      }
+
+      function writeString(view, offset, string) {
+        for (let i = 0; i < string.length; i++) {
+          view.setUint8(offset + i, string.charCodeAt(i));
+        }
+      }
+
+      function floatTo16BitPCM(output, offset, input) {
+        for (let i = 0; i < input.length; i++, offset += 2) {
+          const s = Math.max(-1, Math.min(1, input[i]));
+          output.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+        }
+      }
+
+      // --- Camera and Frame/Audio Sending Functions ---
+
+      /**
+       * Captures a frame from the video element and audio chunk, then sends as base64 to Gateway.
+       */
+      function captureAndSendFrameAndAudio() {
+        const video = document.getElementById("studentCamera");
+
+        // --- Video Frame Capture ---
+        let base64Image = null;
+        if (
+          video.readyState === video.HAVE_ENOUGH_DATA &&
+          video.videoWidth > 0 &&
+          video.videoHeight > 0
+        ) {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const context = canvas.getContext("2d");
+          context.drawImage(video, 0, 0, canvas.width, canvas.height);
+          const base64ImageWithPrefix = canvas.toDataURL("image/jpeg", 0.8);
+          base64Image = base64ImageWithPrefix.split(",")[1];
+        } else {
+          // console.warn("Video not ready for capturing frame or has zero dimensions. Sending image as null.");
+          // This warning can be noisy; keep it for initial debugging if needed.
+        }
+
+        // --- Audio Data Retrieval and Encoding ---
+        let base64Audio = null;
+        if (audioDataBuffer.length > 0 && audioSampleRate > 0) {
+          // Concatenate all buffered audio data
+          const combinedBuffer = new Float32Array(
+            audioDataBuffer.reduce((acc, val) => acc + val.length, 0)
+          );
+          let offset = 0;
+          for (let i = 0; i < audioDataBuffer.length; i++) {
+            combinedBuffer.set(audioDataBuffer[i], offset);
+            offset += audioDataBuffer[i].length;
+          }
+          audioDataBuffer = []; // Clear buffer after combining
+
+          // Encode to WAV and then to Base64
+          const audioChunkBytes = encodeWAV(combinedBuffer, audioSampleRate);
+          if (audioChunkBytes && audioChunkBytes.length > 0) {
+            // Convert Uint8Array to binary string, then Base64
+            base64Audio = btoa(
+              String.fromCharCode.apply(null, audioChunkBytes)
+            );
+            // console.log(`Frontend: Prepared audio chunk (length: ${audioChunkBytes.length} bytes)`); // Debug print
+          } else {
+            console.warn("Frontend: Encoded audio chunk is empty.");
+          }
+        } else {
+          // console.log("Frontend: No audio data available in buffer or sample rate not set."); // Debug print
+        }
+
+        // Construct the payload
+        const payload = {
+          frame: base64Image,
+          audio: base64Audio, // Include audio data
+        };
+
+        // Send the frame and audio to the API Gateway's process_frame endpoint
+        fetch(`${GATEWAY_URL}/process_frame`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        })
+          .then((res) => {
+            if (!res.ok) {
+              return res.text().then((text) => {
+                throw new Error(
+                  `HTTP error! Status: ${res.status}, Message: ${text}`
+                );
+              });
+            }
+            return res.json();
+          })
+          .then((data) => {
+            // console.log("Detections from Gateway:", data); // Log all data for debugging
+            handleDetections(data); // Process the combined detections
+          })
+          .catch((err) => {
+            console.error(
+              "Error sending frame/audio or receiving detections:",
+              err
+            );
+          });
+      }
+
+      /**
+       * Handles the combined detection data received from the API Gateway.
+       * This is where you implement your cheating detection logic and log events.
+       * @param {object} data - The JSON object containing results from all services.
+       */
+      function handleDetections(data) {
+        const currentTime = new Date().toLocaleTimeString();
+        const proctoringStatusElement =
+          document.getElementById("proctoringStatus");
+        let statusMessages = []; // Collect status messages for display
+
+        // Object Detection
+        if (data.object && data.object.objects) {
+          const cheatingObjects = data.object.objects.filter(
+            (obj) =>
+              obj.label === "Book" ||
+              obj.label === "Phone" ||
+              obj.label === "Notes" ||
+              obj.label === "Other Person"
+          );
+          if (cheatingObjects.length > 0) {
+            const labels = cheatingObjects.map((o) => o.label).join(", ");
+            const message = `Detected suspicious object(s): ${labels}`;
+            console.warn(`[${currentTime}] ${message}`);
+            proctoringDetectionLogs.push({
+              timestamp: Date.now(),
+              message: message,
+              type: "object_detection",
+            });
+            statusMessages.push(`Objects: ${labels}`);
+          }
+        }
+
+        // Voice Detection
+        if (
+          data.voice &&
+          data.voice.detected_sound &&
+          data.voice.detected_sound !== "Silence"
+        ) {
+          const message = `Voice activity detected: ${
+            data.voice.detected_sound
+          } (Confidence: ${data.voice.confidence.toFixed(2)})`;
+          console.warn(`[${currentTime}] ${message}`);
+          proctoringDetectionLogs.push({
+            timestamp: Date.now(),
+            message: message,
+            type: "voice_detection",
+          });
+          statusMessages.push(`Voice: ${data.voice.detected_sound}`);
+        }
+
+        // Face Detection (Multiple Faces)
+        if (
+          data.face &&
+          data.face.face_detections &&
+          data.face.face_detections.length > 1
+        ) {
+          const message = `Multiple faces detected (${data.face.face_detections.length} faces)`;
+          console.warn(`[${currentTime}] ${message}`);
+          proctoringDetectionLogs.push({
+            timestamp: Date.now(),
+            message: message,
+            type: "face_detection",
+          });
+          statusMessages.push(
+            `Faces: Multiple (${data.face.face_detections.length})`
+          );
+        }
+
+        // Face Detection (No Face Detected - ensure it's not just a skipped frame/no data)
+        // Check if face_detections array is explicitly empty AND if the reason is NOT "No face data provided"
+        if (
+          data.face &&
+          data.face.face_detections &&
+          data.face.face_detections.length === 0 &&
+          (!data.face.reason ||
+            data.face.reason !== "No face data provided to gateway")
+        ) {
+          const message = `No face detected on camera.`;
+          console.warn(`[${currentTime}] ${message}`);
+          proctoringDetectionLogs.push({
+            timestamp: Date.now(),
+            message: message,
+            type: "no_face",
+          });
+          statusMessages.push(`Face: Not detected`);
+        } else if (
+          data.face &&
+          data.face.status === "skipped" &&
+          data.face.reason === "No face data provided to gateway"
+        ) {
+          // This indicates an an issue with frame capture/sending to the gateway, not necessarily a proctoring violation.
+          console.log(
+            `[${currentTime}] Face detection skipped by gateway: ${data.face.reason}`
+          );
+        }
+
+        // Update the real-time proctoring status display
+        if (proctoringStatusElement) {
+          if (statusMessages.length > 0) {
+            proctoringStatusElement.textContent = `Proctoring: ${statusMessages.join(
+              " | "
+            )}`;
+            proctoringStatusElement.style.color = "#dc3545"; // Red for active detection
+          } else {
+            proctoringStatusElement.textContent = "Proctoring: All clear.";
+            proctoringStatusElement.style.color = "#28a745"; // Green for no detections
+          }
+        }
+      }
+
+      /**
+       * Starts the interval for capturing and sending frames and audio to the gateway.
+       */
+      function startSendingFramesAndAudio() {
+        if (detectionInterval) {
+          clearInterval(detectionInterval); // Prevent multiple intervals
+        }
+        detectionInterval = setInterval(
+          captureAndSendFrameAndAudio,
+          SEND_FRAME_INTERVAL_MS
+        );
+        console.log(
+          `Started sending frames and audio to gateway every ${SEND_FRAME_INTERVAL_MS}ms.`
+        );
+      }
+
+      /**
+       * Stops the interval for sending frames/audio.
+       */
+      function stopSendingFramesAndAudio() {
+        if (detectionInterval) {
+          clearInterval(detectionInterval);
+          detectionInterval = null;
+          console.log("Stopped sending frames and audio to gateway.");
+        }
+      }
+
+      /**
+       * Initializes the student's camera and microphone and starts the exam process.
+       */
+      function startCamera() {
+        console.log("Attempting to start camera and microphone...");
+        const videoElement = document.getElementById("studentCamera");
+
+        if (navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices
+            .getUserMedia({ video: true, audio: true })
+            .then(function (stream) {
+              console.log("Camera and microphone access granted.");
+              mediaStream = stream;
+              videoElement.srcObject = stream;
+              videoElement.muted = true; // Mute the video element itself
+              console.log("Video element muted to prevent audio feedback.");
+
+              // Initialize Web Audio API components
+              audioContext = new (window.AudioContext ||
+                window.webkitAudioContext)();
+              mediaStreamSource = audioContext.createMediaStreamSource(stream);
+              audioSampleRate = audioContext.sampleRate; // Store actual sample rate
+              console.log(
+                "AudioContext created with sample rate:",
+                audioSampleRate
+              );
+
+              audioProcessor = audioContext.createScriptProcessor(4096, 1, 1);
+              console.log("ScriptProcessorNode created.");
+
+              audioProcessor.onaudioprocess = (event) => {
+                const inputBuffer = event.inputBuffer.getChannelData(0);
+                audioDataBuffer.push(new Float32Array(inputBuffer));
+              };
+
+              audioGainNode = audioContext.createGain(); // Create the GainNode
+              audioGainNode.gain.value = 0; // Set its gain to 0 (MUTE IT)
+
+              mediaStreamSource.connect(audioProcessor); // Connect microphone source to the processor
+              audioProcessor.connect(audioGainNode); // Connect processor output to the silent GainNode
+              audioGainNode.connect(audioContext.destination); // Connect silent GainNode to speakers (completes the path)
+
+              // Ensure video metadata is loaded before starting frame capture
+              videoElement.onloadedmetadata = () => {
+                console.log("Camera feed loaded.");
+                startTimer(3600); // Default 1 hour duration
+                startSendingFramesAndAudio();
+              };
+            })
+            .catch(function (error) {
+              console.error("Camera/Mic access error:", error);
+              showCustomMessageBox(
+                "Camera/Mic Error",
+                `Failed to access camera or microphone: ${error.message}. Please allow access.`
+              );
+            });
+        } else {
+          showCustomMessageBox(
+            "Browser Not Supported",
+            "Your browser does not support camera/microphone access."
+          );
+        }
+      }
+      /**
+       * Stops the camera and microphone streams (important for cleanup).
+       */
+      function stopCamera() {
+        console.log("Attempting to stop camera and microphone...");
+        if (mediaStream) {
+          mediaStream.getTracks().forEach((track) => track.stop());
+          console.log("Camera and microphone streams stopped.");
+        }
+        // Disconnect and close Web Audio API nodes in reverse order of connection
+        if (mediaStreamSource) mediaStreamSource.disconnect();
+        if (audioProcessor) audioProcessor.disconnect();
+        if (audioGainNode) audioGainNode.disconnect(); // Ensure gain node is also disconnected
+        if (audioContext)
+          audioContext.close().then(() => console.log("AudioContext closed."));
+
+        stopSendingFramesAndAudio();
+      }
+
+      /**
+       * Sends a text answer to the AI detection gateway.
+       * @param {string} text - The text to be analyzed.
+       * @returns {Promise<string>} A promise that resolves with the AI detection result ('AI-generated' or 'Human-written').
+       */
+      async function sendTextToAIDetection(text) {
+        try {
+          const response = await fetch(GATEWAY_TEXT_DETECTION_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text: text }),
+          });
+
+          if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(
+              `HTTP error! Status: ${response.status}, Message: ${errorText}`
+            );
+          }
+
+          const data = await response.json();
+          console.log("AI Text Detection Result:", data);
+          return data.prediction || "Undetermined"; // Return "AI-generated", "Human-written", or "Undetermined"
+        } catch (error) {
+          console.error("Error sending text to AI detection gateway:", error);
+          // Return 'Error' or 'Undetermined' if the API call fails
+          return "Error during AI detection";
+        }
+      }
+
+      /**
+       * Submits the exam, collects answers, saves results to localStorage,
+       * and displays the post-submit choice modal.
+       * @param {Event} event - The submit event from the form.
+       */
+      async function submitExam(event) {
+        event.preventDefault(); // Prevent actual form submission
+
+        showLoading(); // Show loading indicator during submission
+
+        // Stop camera and frame/audio sending
+        stopCamera();
+        // Hide the camera box
+        document.getElementById("cameraBox").style.display = "none";
+        // Clear the timer interval
+        if (timerIntervalId) {
+          clearInterval(timerIntervalId);
+        }
+
+        // Hide the exam form and the original message box
+        document.getElementById("examSection").style.display = "none";
+        document.getElementById("messageBox").style.display = "none";
+
+        // Collect student answers and prepare AI detection promises
+        studentAnswersGlobal = {}; // Reset global answers
+        let studentScore = 0;
+        const detectionPromises = [];
+
+        questionsLoaded.forEach((question, qIndex) => {
+          if (question.type === "mcq") {
+            const selectedOption = document.querySelector(
+              `input[name="q-${qIndex}"]:checked`
+            );
+            const studentAnswerText = selectedOption
+              ? selectedOption.value
+              : null;
+            studentAnswersGlobal[qIndex] = studentAnswerText;
+
+            const correctAnswerObj = question.options.find(
+              (opt) => opt.correct
+            );
+            const correctAnswerText = correctAnswerObj
+              ? correctAnswerObj.text
+              : null;
+
+            if (
+              studentAnswerText !== null &&
+              studentAnswerText === correctAnswerText
+            ) {
+              studentScore++;
+            }
+          } else if (question.type === "text") {
+            const studentAnswerTextarea = document.getElementById(
+              `q${qIndex}-textarea`
+            );
+            const studentAnswerText = studentAnswerTextarea
+              ? studentAnswerTextarea.value.trim()
+              : null;
+
+            // Store a placeholder first
+            studentAnswersGlobal[qIndex] = {
+              text: studentAnswerText,
+              aiDetection: "Processing...", // Placeholder
+            };
+
+            // Add promise to the array for AI detection
+            detectionPromises.push(
+              sendTextToAIDetection(studentAnswerText || "") // Send empty string if no answer
+                .then((detectionResult) => {
+                  // Update the stored answer with the actual detection result
+                  studentAnswersGlobal[qIndex].aiDetection = detectionResult;
+                })
+                .catch((error) => {
+                  console.error(
+                    `Error processing AI detection for question ${qIndex}:`,
+                    error
+                  );
+                  studentAnswersGlobal[qIndex].aiDetection =
+                    "AI detection failed";
+                })
+            );
+          }
+        });
+
+        // Await all AI detection promises
+        await Promise.all(detectionPromises);
+
+        console.log(
+          "Final Student's Answers (with AI detection for text):",
+          studentAnswersGlobal
+        );
+        console.log("Student's MCQ Score:", studentScore);
+
+        // --- Prepare submission data ---
+        const studentId =
+          localStorage.getItem("loggedInUserId") || "student@example.com_id";
+        const studentName =
+          localStorage.getItem("loggedInUserName") || "Unknown Student Name";
+        const examId =
+          localStorage.getItem("currentExamIdForStudent") || "unknown-exam-id";
+        const examTitle = localStorage.getItem("examTitle") || "Untitled Exam";
+
+        const submissionData = {
+          studentId: studentId,
+          studentName: studentName,
+          examId: examId,
+          examTitle: examTitle,
+          score: studentScore,
+          totalQuestions: questionsLoaded.filter((q) => q.type === "mcq")
+            .length,
+          answers: studentAnswersGlobal,
+          questions: questionsLoaded,
+          timestamp: Date.now(),
+          detectionLogs: proctoringDetectionLogs,
+        };
+
+        // --- Save results to localStorage ---
+        try {
+          let existingSubmissions = JSON.parse(
+            localStorage.getItem("examSubmissions") || "[]"
+          );
+          existingSubmissions.push(submissionData);
+          localStorage.setItem(
+            "examSubmissions",
+            JSON.stringify(existingSubmissions)
+          );
+          console.log("✅ Exam submission saved to localStorage successfully!");
+
+          // Store the current submission data specifically for display on score.html
+          localStorage.setItem(
+            "lastExamSubmissionDisplay",
+            JSON.stringify(submissionData)
+          );
+        } catch (error) {
+          console.error(
+            "❌ Error saving exam results to localStorage: ",
+            error
+          );
+          showCustomMessageBox(
+            "Submission Error",
+            `Failed to save exam results: ${error.message}`
+          );
+        } finally {
+          hideLoading(); // Hide loading indicator
+        }
+
+        // Show the success message briefly, then the choice modal
+        document.getElementById("messageBox").style.display = "block";
+        setTimeout(() => {
+          document.getElementById("messageBox").style.display = "none";
+          document.getElementById("postSubmitChoiceModal").style.display =
+            "flex"; // Show the choice modal
+        }, 1500); // Display success message for 1.5 seconds
+      }
+
+      /**
+       * Called when the student chooses to view results.
+       * Now redirects to score.html
+       */
+      function viewResults() {
+        document.getElementById("postSubmitChoiceModal").style.display = "none"; // Hide the choice modal
+        // Redirect to score.html, data is already stored in localStorage
+        window.location.href = "score.html";
+      }
+
+      /**
+       * Redirects the user to the home page (student_home.html for students, instructor_dashboard.html for instructors).
+       */
+      function goToHomePage() {
+        // Hide any active modals before redirecting
+        document.getElementById("postSubmitChoiceModal").style.display = "none";
+        document.getElementById("customMessageBoxOverlay").style.display =
+          "none";
+
+        // Show the navbar and restore body padding before redirecting
+        document.getElementById("mainNavbar").style.display = "block";
+        document.body.style.paddingTop = "80px";
+
+        const loggedInUserRole = localStorage.getItem("loggedInUserRole");
+        if (loggedInUserRole === "instructor") {
+          window.location.href = "instructor-dashboard.html";
+        } else {
+          window.location.href = "home.html";
+        }
+      }
+
+      function goFullScreen() {
+        const el = document.documentElement;
+        if (el.requestFullscreen) el.requestFullscreen();
+        else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+        else if (el.msRequestFullscreen) el.msRequestFullscreen();
+      }
+
+      function showExitFullscreenModal() {
+        const modal = document.createElement("div");
+        modal.id = "exitFullscreenModal";
+        modal.style.position = "fixed";
+        modal.style.top = "0";
+        modal.style.left = "0";
+        modal.style.width = "100vw";
+        modal.style.height = "100vh";
+        modal.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+        modal.style.display = "flex";
+        modal.style.justifyContent = "center";
+        modal.style.alignItems = "center";
+        modal.style.zIndex = "9999";
+
+        const modalContent = document.createElement("div");
+        modalContent.className = "modal-content";
+
+        const message = document.createElement("p");
+        message.textContent =
+          "You are not allowed to leave fullscreen mode. Do you want to exit?";
+        modalContent.appendChild(message);
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.style.marginTop = "20px";
+
+        const okButton = document.createElement("button");
+        okButton.textContent = "OK";
+        okButton.style.marginRight = "10px";
+        okButton.style.backgroundColor = "#dc3545";
+        okButton.style.color = "white";
+        okButton.style.border = "none";
+        okButton.style.padding = "10px 20px";
+        okButton.style.borderRadius = "5px";
+        okButton.onclick = function () {
+          stopCamera();
+          document.getElementById("mainNavbar").style.display = "block";
+          document.body.style.paddingTop = "80px";
+          goToHomePage();
+          document.body.removeChild(modal);
+        };
+
+        const cancelButton = document.createElement("button");
+        cancelButton.textContent = "Cancel";
+        cancelButton.style.backgroundColor = "#28a745";
+        cancelButton.style.color = "white";
+        cancelButton.style.border = "none";
+        cancelButton.style.padding = "10px 20px";
+        cancelButton.style.borderRadius = "5px";
+        cancelButton.onclick = function () {
+          document.body.removeChild(modal);
+          goFullScreen(); // Attempt to re-enter fullscreen
+        };
+
+        buttonContainer.appendChild(okButton);
+        buttonContainer.appendChild(cancelButton);
+        modalContent.appendChild(buttonContainer);
+        modal.appendChild(modalContent);
+        document.body.appendChild(modal);
+
+        // Disable navigation away or new tab opening while the modal is active
+        preventNavigation();
+      }
+
+      function exitFullscreenEvent() {
+        showExitFullscreenModal();
+      }
+
+      function preventNavigation() {
+        window.addEventListener("beforeunload", handleUnload);
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+      }
+
+      function handleVisibilityChange() {
+        if (document.visibilityState === "hidden") {
+          // Attempt to exit fullscreen on tab/window change
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          } else if (document.webkitFullscreenElement) {
+            document.webkitExitFullscreen();
+          } else if (document.mozFullScreenElement) {
+            document.mozCancelFullScreen();
+          } else if (document.msFullscreenElement) {
+            document.msExitFullscreen();
+          }
+          // If the above doesn't trigger the fullscreenchange event (e.g. on mobile),
+          // directly show the modal or end the exam.
+          // For now, let's rely on fullscreenchange event to trigger showExitFullscreenModal.
+          // If the exam still continues without proper fullscreen, force end it.
+          if (document.visibilityState === "hidden") {
+            // Re-check state after exit attempt
+            showCustomMessageBox(
+              "Exam Ended",
+              "You left the exam window/tab. The exam will now end."
+            );
+            stopCamera(); // Stop camera when leaving visibility
+            document.getElementById("mainNavbar").style.display = "block";
+            document.body.style.paddingTop = "80px";
+            if (timerIntervalId) clearInterval(timerIntervalId);
+            setTimeout(() => {
+              goToHomePage();
+            }, 3000);
+          }
+        }
+      }
+
+      function handleUnload(event) {
+        event.preventDefault(); // Prevent the default action of closing or navigating away
+        event.returnValue = ""; // Required for some browsers to show a custom message
+        showCustomMessageBox(
+          "Exam Ended",
+          "Navigating away or closing this tab will end your exam."
+        );
+        stopCamera(); // Stop camera on unload
+        // Show navbar and restore padding
+        document.getElementById("mainNavbar").style.display = "block";
+        document.body.style.paddingTop = "80px";
+        if (timerIntervalId) clearInterval(timerIntervalId); // Stop timer
+        setTimeout(() => {
+          goToHomePage();
+        }, 3000); // Use adaptive goToHomePage
+      }
+
+      document.addEventListener("fullscreenchange", (event) => {
+        if (!document.fullscreenElement) {
+          exitFullscreenEvent();
+        }
+      });
+
+      document.addEventListener("webkitfullscreenchange", (event) => {
+        if (!document.webkitFullscreenElement) {
+          exitFullscreenEvent();
+        }
+      });
+
+      document.addEventListener("mozfullscreenchange", (event) => {
+        if (!document.mozFullScreen) {
+          exitFullscreenEvent();
+        }
+      });
+
+      document.addEventListener("msfullscreenchange", (event) => {
+        if (!document.msFullscreenElement) {
+          exitFullscreenEvent();
+        }
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") {
+          e.preventDefault();
+          showExitFullscreenModal();
+        }
+      });
+
+      /**
+       * Starts the exam: enters full screen, hides navbar, shows exam section, starts camera, and loads questions.
+       */
+      function startExam() {
+        console.log("Start Exam button clicked. Initiating exam sequence...");
+        goFullScreen(); // Attempt to enter fullscreen
+
+        // Hide the navbar and adjust body padding
+        document.getElementById("mainNavbar").style.display = "none";
+        document.body.style.paddingTop = "20px"; // Adjust padding since navbar is hidden
+
+        // Ensure UI elements are shown/hidden regardless of camera access or question loading success
+        document.getElementById("instructionsBox").style.display = "none";
+        document.getElementById("examSection").style.display = "block";
+        document.getElementById("cameraBox").style.display = "block";
+
+        // Load questions first so the exam structure is ready
+        loadExamQuestions();
+
+        // Start camera and timer only after the basic exam structure is visible
+        startCamera(); // This will now handle camera setup and frame and audio sending
+        console.log("Exam section and camera box should now be visible.");
+      }
+
+      /**
+       * Starts the countdown timer for the exam.
+       * @param {number} duration - The duration of the exam in seconds.
+       */
+      function startTimer(duration) {
+        let timer = duration;
+        const display = document.getElementById("timer");
+        timerIntervalId = setInterval(() => {
+          // Assign to global variable
+          const hours = String(Math.floor(timer / 3600)).padStart(2, "0");
+          const minutes = String(Math.floor((timer % 3600) / 60)).padStart(
+            2,
+            "0"
+          );
+          const seconds = String(timer % 60).padStart(2, "0");
+          display.textContent = `Time Left: ${hours}:${minutes}:${seconds}`;
+          if (--timer < 0) {
+            clearInterval(timerIntervalId); // Clear interval when time's up
+            showCustomMessageBox(
+              "Time's Up!",
+              "Time's up! The exam will now be submitted."
+            );
+            submitExam({ preventDefault: () => {} }); // Call submitExam when timer ends
+          }
+        }, 1000);
+      }
+
+      /**
+       * Loads questions from localStorage and populates the exam form.
+       */
+      function loadExamQuestions() {
+        console.log("Attempting to load exam questions...");
+        const dynamicQuestionsContainer = document.getElementById(
+          "dynamicQuestionsContainer"
+        );
+        const noQuestionsMessage =
+          document.getElementById("noQuestionsMessage");
+        dynamicQuestionsContainer.innerHTML = ""; // Clear previous content
+
+        // Get the specific exam questions based on currentExamIdForStudent
+        const currentExamId = localStorage.getItem("currentExamIdForStudent");
+        let allExams = JSON.parse(localStorage.getItem("exams") || "[]");
+        const examToTake = allExams.find((exam) => exam.id === currentExamId);
+
+        if (examToTake && examToTake.questions) {
+          questionsLoaded = examToTake.questions; // Use questions from the specific exam
+        } else {
+          console.error(
+            `No questions found for exam ID: ${currentExamId}. Falling back to generic.`
+          );
+          // Fallback: Try to load from the generic 'questions' key, but ideally this won't happen.
+          let storedQuestions = localStorage.getItem("questions");
+          try {
+            questionsLoaded = storedQuestions
+              ? JSON.parse(storedQuestions)
+              : [];
+            if (!Array.isArray(questionsLoaded)) {
+              throw new Error("Corrupted data in localStorage for questions.");
+            }
+          } catch (error) {
+            console.error(
+              "Error parsing questions from localStorage (fallback):",
+              error
+            );
+            showCustomMessageBox(
+              "Load Error",
+              "Failed to load exam questions due to data corruption. Please contact instructor."
+            );
+            questionsLoaded = [];
+          }
+        }
+
+        if (questionsLoaded.length === 0) {
+          noQuestionsMessage.style.display = "block";
+          dynamicQuestionsContainer.appendChild(noQuestionsMessage); // Ensure message is inside container
+          console.log(
+            "No questions found for this exam or in localStorage. Displaying 'No questions available' message."
+          );
+        } else {
+          noQuestionsMessage.style.display = "none";
+          questionsLoaded.forEach((q, index) => {
+            const questionDiv = document.createElement("div");
+            questionDiv.className = "question";
+
+            let questionHtml = `<p>${index + 1}. ${q.question}</p>`;
+
+            if (q.type === "mcq") {
+              if (!q.options || !Array.isArray(q.options)) {
+                console.warn(
+                  `Skipping malformed MCQ question at index ${index}:`,
+                  q
+                );
+                questionHtml += `<p style="color: red;">Error: Invalid Multiple Choice Question format.</p>`;
+              } else {
+                let optionsHtml = "";
+                q.options.forEach((opt, optIndex) => {
+                  optionsHtml += `
+                                <div class="form-check">
+                                    <input type="radio" class="form-check-input" name="q-${index}" id="q${index}-opt${optIndex}" value="${opt.text}">
+                                    <label class="form-check-label" for="q${index}-opt${optIndex}">${opt.text}</label>
+                                </div>
+                            `;
+                });
+                questionHtml += optionsHtml;
+              }
+            } else if (q.type === "text") {
+              // Text questions do not have options, they have a correctAnswer property
+              // We only need to check if correctAnswer exists and is a string for validity, but it's not used in rendering the input field
+              if (typeof q.correctAnswer !== "string") {
+                console.warn(
+                  `Skipping malformed Text question at index ${index}:`,
+                  q
+                );
+                questionHtml += `<p style="color: red;">Error: Invalid Text Question format (missing correctAnswer string).</p>`;
+              } else {
+                // For text questions, provide a textarea for the student to type in
+                questionHtml += `
+                            <div class="form-group">
+                                <label for="q${index}-textarea">Your Answer:</label>
+                                <textarea class="form-control" id="q${index}-textarea" rows="4" placeholder="Type your answer here"></textarea>
+                            </div>
+                        `;
+              }
+            } else {
+              console.warn(
+                `Skipping question with unknown type '${q.type}' at index ${index}:`,
+                q
+              );
+              questionHtml += `<p style="color: red;">Error: Unknown Question Type.</p>`;
+            }
+
+            questionDiv.innerHTML = questionHtml;
+            dynamicQuestionsContainer.appendChild(questionDiv);
+          });
+          console.log(
+            `Successfully loaded ${questionsLoaded.length} questions for exam ID: ${currentExamId}.`
+          );
+        }
+        // Set the timer duration based on the exam.duration, defaulting to 1 hour
+        if (
+          examToTake &&
+          typeof examToTake.duration === "number" &&
+          examToTake.duration > 0
+        ) {
+          startTimer(examToTake.duration * 60); // Convert minutes to seconds
+        } else {
+          console.warn(
+            "Exam duration not found or invalid. Defaulting to 1 hour."
+          );
+          startTimer(3600); // Default 1 hour
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Normal student flow: show instructions or exam if already started
+        document.getElementById("instructionsBox").style.display = "block";
+        document.getElementById("examSection").style.display = "none";
+        document.getElementById("cameraBox").style.display = "none";
+        // Ensure navbar is visible initially for student
+        document.getElementById("mainNavbar").style.display = "block";
+        document.body.style.paddingTop = "80px";
+      });
+
+      // Add an event listener to stop the camera and sending frames when the page is unloaded
+      window.addEventListener("beforeunload", stopCamera);
+    </script>
+  </body>
+</html>

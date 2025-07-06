@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam Panel</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        font-family: "Inter", Arial, sans-serif; /* Consistent font */
+        background-color: #f8f9fa;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .exam-panel {
+        width: 100%;
+        max-width: 500px; /* Constrain width for better appearance */
+        background: white;
+        padding: 30px; /* Increased padding */
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+      h2 {
+        color: #333;
+        margin-bottom: 25px;
+      }
+      label {
+        display: block; /* Make labels block elements for better spacing */
+        text-align: left;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555;
+      }
+      input[type="text"],
+      input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px; /* Consistent margin */
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+      input[type="radio"] {
+        margin-right: 5px;
+        margin-bottom: 10px; /* Margin for radio buttons */
+      }
+      .form-check-inline {
+        margin-right: 15px; /* Space between radio options */
+      }
+      button {
+        background: #003366; /* Match instructor dashboard button color */
+        color: white;
+        border: none;
+        padding: 12px 25px; /* Larger padding for button */
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 20px; /* More margin from fields */
+        font-size: 1.1em;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+      button:hover {
+        background: #005599; /* Darker blue on hover */
+        transform: translateY(-2px);
+      }
+
+      /* Custom Message Box Styling (replacing alert()) */
+      .message-box-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+      .message-box-content {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 350px;
+        width: 90%;
+      }
+      .message-box-content h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      .message-box-content p {
+        margin-bottom: 20px;
+        color: #666;
+      }
+      .message-box-content button {
+        background: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+      }
+      .message-box-content button:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="exam-panel">
+      <h2>Exam Options</h2>
+      <label for="examTitle">Exam Title:</label>
+      <input type="text" id="examTitle" placeholder="Enter Exam Title" /><br />
+
+      <label>Exam Type:</label><br />
+      <div class="d-flex justify-content-center mb-3">
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="examType"
+            id="examTypeMidterm"
+            value="Midterm"
+          />
+          <label class="form-check-label" for="examTypeMidterm">Midterm</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="examType"
+            id="examTypeFinal"
+            value="Final"
+          />
+          <label class="form-check-label" for="examTypeFinal">Final</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="examType"
+            id="examTypeQuiz"
+            value="Quiz"
+          />
+          <label class="form-check-label" for="examTypeQuiz">Quiz</label>
+        </div>
+      </div>
+
+      <label for="examDuration">Duration (minutes):</label>
+      <input
+        type="number"
+        id="examDuration"
+        placeholder="Enter duration"
+      /><br />
+
+      <button onclick="createExam()">Create</button>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div class="message-box-overlay" id="messageBoxOverlay">
+      <div class="message-box-content">
+        <h3 id="messageBoxTitle"></h3>
+        <p id="messageBoxText"></p>
+        <button onclick="closeMessageBox()">OK</button>
+      </div>
+    </div>
+
+    <script>
+      // --- Custom Message Box Functions ---
+      function showMessageBox(title, message) {
+        document.getElementById("messageBoxTitle").innerText = title;
+        document.getElementById("messageBoxText").innerText = message;
+        document.getElementById("messageBoxOverlay").style.display = "flex";
+      }
+
+      function closeMessageBox() {
+        document.getElementById("messageBoxOverlay").style.display = "none";
+      }
+
+      function createExam() {
+        const title = document.getElementById("examTitle").value.trim();
+        const duration = document.getElementById("examDuration").value.trim();
+        const type = document.querySelector(
+          'input[name="examType"]:checked'
+        )?.value;
+
+        if (!title || !type || !duration) {
+          showMessageBox(
+            "Input Required",
+            "Please fill in all fields (Exam Title, Type, and Duration)."
+          );
+          return;
+        }
+
+        // Store data in session storage to pass to the next page
+        sessionStorage.setItem("examTitle", title);
+        sessionStorage.setItem("examType", type);
+        sessionStorage.setItem("examDuration", duration);
+
+        // Navigate to exam-questions.html as requested
+        window.location.href = "exam-questions.html";
+      }
+    </script>
+  </body>
+</html>

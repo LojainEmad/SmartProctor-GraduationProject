@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Submissions</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Google Fonts - Inter -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", Arial, sans-serif;
+        background-color: #f4f7f6;
+        padding-top: 20px;
+        padding-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+      }
+      .container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 900px;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      h1 {
+        color: #333;
+        margin-bottom: 25px;
+      }
+      .results-list {
+        margin-top: 20px;
+        text-align: left;
+      }
+      .result-item {
+        background: #e9ecef;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border-left: 5px solid #007bff;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px; /* Added gap for spacing between content and buttons */
+      }
+      .result-item strong {
+        color: #003366;
+      }
+      .result-item p {
+        margin-bottom: 5px;
+      }
+      .score {
+        font-weight: bold;
+        color: #28a745;
+        font-size: 1.1em;
+      }
+      .button-group {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 10px; /* Space from text above */
+      }
+      .button-group .btn {
+        padding: 8px 15px;
+        font-size: 0.95em;
+        border-radius: 6px;
+      }
+      /* Style for the new delete button */
+      .button-group .btn-danger {
+        background-color: #dc3545; /* Red color for delete */
+        border-color: #dc3545;
+        color: white;
+      }
+      .button-group .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #bd2130;
+      }
+
+      .no-results {
+        color: #6c757d;
+        font-style: italic;
+        text-align: center;
+        padding: 20px 0;
+      }
+      .back-button-container {
+        text-align: center;
+        margin-top: 30px;
+      }
+      .back-button-container .btn {
+        padding: 10px 25px;
+        font-size: 1.1em;
+        border-radius: 8px;
+        background-color: #6c757d;
+        color: white;
+        border: none;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+      }
+      .back-button-container .btn:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+      }
+
+      /* Custom Message Box for general alerts */
+      .message-box-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+      .message-box-content {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 350px;
+        width: 90%;
+      }
+      .message-box-content h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      .message-box-content p {
+        margin-bottom: 20px;
+        color: #666;
+      }
+      .message-box-content .button-group-modal {
+        /* New class for modal buttons */
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
+      .message-box-content .button-group-modal button {
+        background: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+        color: white;
+        border: none;
+      }
+      .message-box-content .button-group-modal button.btn-cancel {
+        background-color: #6c757d; /* Grey for cancel */
+      }
+      .message-box-content .button-group-modal button.btn-confirm-delete {
+        background-color: #dc3545; /* Red for confirm delete */
+      }
+      .message-box-content button:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="text-center mb-4">Student Exam Submissions</h1>
+
+      <div class="results-list" id="allSubmissionsList">
+        <p class="no-results" id="noSubmissionsMessage">
+          No exam submissions found.
+        </p>
+        <!-- Student submissions will be dynamically loaded here -->
+      </div>
+
+      <div class="back-button-container">
+        <button class="btn" onclick="backToDashboard()">
+          Back to Dashboard
+        </button>
+      </div>
+    </div>
+
+    <!-- Custom Message Box for general alerts and confirmations -->
+    <div class="message-box-overlay" id="messageBoxOverlay">
+      <div class="message-box-content">
+        <h3 id="messageBoxTitle"></h3>
+        <p id="messageBoxText"></p>
+        <div class="button-group-modal" id="messageBoxButtons">
+          <button id="messageBoxOkButton" onclick="closeMessageBox()">
+            OK
+          </button>
+          <!-- Confirmation buttons will be added here dynamically if needed -->
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      let currentDeleteIndex = -1; // Global variable to store the index of the submission to be deleted
+
+      // --- UI Utility Functions ---
+      /**
+       * Displays a custom message box.
+       * Can be used for simple alerts or confirmations.
+       * @param {string} title - The title of the message box.
+       * @param {string} message - The content message.
+       * @param {boolean} [isConfirm=false] - If true, adds 'Yes'/'No' buttons for confirmation.
+       * @param {function} [onConfirmCallback=null] - Callback function if 'Yes' is clicked in confirm mode.
+       */
+      function showMessageBox(
+        title,
+        message,
+        isConfirm = false,
+        onConfirmCallback = null
+      ) {
+        document.getElementById("messageBoxTitle").innerText = title;
+        document.getElementById("messageBoxText").innerText = message;
+
+        const messageBoxButtons = document.getElementById("messageBoxButtons");
+        messageBoxButtons.innerHTML = ""; // Clear previous buttons
+
+        if (isConfirm) {
+          const confirmBtn = document.createElement("button");
+          confirmBtn.innerText = "Delete";
+          confirmBtn.className = "btn btn-confirm-delete";
+          confirmBtn.onclick = () => {
+            // IMPORTANT: Do NOT call closeMessageBox() here. Let the callback handle it.
+            if (onConfirmCallback) {
+              onConfirmCallback(); // Execute the action, which will then close the box
+            }
+          };
+
+          const cancelBtn = document.createElement("button");
+          cancelBtn.innerText = "Cancel";
+          cancelBtn.className = "btn btn-cancel";
+          cancelBtn.onclick = () => {
+            currentDeleteIndex = -1; // Reset index on cancel
+            closeMessageBox(); // Now it's safe to close
+          };
+
+          messageBoxButtons.appendChild(confirmBtn);
+          messageBoxButtons.appendChild(cancelBtn);
+        } else {
+          const okBtn = document.createElement("button");
+          okBtn.innerText = "OK";
+          okBtn.className = "btn btn-primary"; // General OK button style
+          okBtn.onclick = closeMessageBox; // For simple alerts, just close
+          messageBoxButtons.appendChild(okBtn);
+        }
+
+        document.getElementById("messageBoxOverlay").style.display = "flex";
+      }
+
+      function closeMessageBox() {
+        document.getElementById("messageBoxOverlay").style.display = "none";
+        // currentDeleteIndex is now managed by executeDeleteSubmission or cancel button in showMessageBox
+      }
+
+      /**
+       * Redirects back to the instructor dashboard.
+       */
+      function backToDashboard() {
+        window.location.href = "instructor_dashboard.html";
+      }
+
+      /**
+       * Loads all exam submissions from localStorage and displays them as a list.
+       */
+      document.addEventListener("DOMContentLoaded", function () {
+        loadSubmissions(); // Call a dedicated function to load and display
+      });
+
+      function loadSubmissions() {
+        console.log("--- Loading Submissions ---");
+        const allSubmissionsListContainer =
+          document.getElementById("allSubmissionsList");
+        const noSubmissionsMessage = document.getElementById(
+          "noSubmissionsMessage"
+        );
+
+        allSubmissionsListContainer.innerHTML = ""; // Clear existing displayed results
+        // Always append the message, its visibility will be toggled later
+        allSubmissionsListContainer.appendChild(noSubmissionsMessage);
+
+        let storedResults = localStorage.getItem("examSubmissions");
+        console.log("Raw storedResults from localStorage:", storedResults); // Log raw data
+        let submissions = [];
+
+        try {
+          submissions = storedResults ? JSON.parse(storedResults) : [];
+          if (!Array.isArray(submissions)) {
+            throw new Error(
+              "Corrupted data in localStorage for exam submissions."
+            );
+          }
+        } catch (error) {
+          console.error(
+            "Error parsing exam submissions from localStorage:",
+            error
+          );
+          showMessageBox(
+            "Load Error",
+            "Failed to load exam submissions due to data corruption. Resetting."
+          );
+          localStorage.removeItem("examSubmissions"); // Clear corrupted data
+          submissions = []; // Ensure submissions is an empty array
+        }
+
+        if (submissions.length === 0) {
+          noSubmissionsMessage.style.display = "block";
+          console.log("No submissions found. Displaying message.");
+        } else {
+          noSubmissionsMessage.style.display = "none";
+          console.log("Submissions found. Hiding message.");
+          // Sort by timestamp for newest first
+          submissions.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+          submissions.forEach((submission, index) => {
+            const resultItem = document.createElement("div");
+            resultItem.className = "result-item";
+
+            const submissionDate = submission.timestamp
+              ? new Date(submission.timestamp).toLocaleString()
+              : "N/A";
+
+            resultItem.innerHTML = `
+                <div>
+                  <p><strong>Student ID:</strong> ${
+                    submission.studentId || "N/A"
+                  }</p>
+                  <p><strong>Student Name:</strong> ${
+                    submission.studentName || "N/A"
+                  }</p>
+                  <p><strong>Exam:</strong> ${
+                    submission.examTitle || "Untitled Exam"
+                  }</p>
+                  <p><strong>Submitted On:</strong> ${submissionDate}</p>
+                  <p class="score">Score: ${submission.score || 0}/${
+              submission.totalQuestions || 0
+            }</p>
+                </div>
+                <div class="button-group">
+                  <button class="btn btn-primary" onclick="viewStudentExamResults(${index})">View Exam Results</button>
+                  <button class="btn btn-info" onclick="viewStudentProctoringReport(${index})">View Proctoring Report</button>
+                  <button class="btn btn-danger" onclick="promptDeleteConfirmation(${index})">Delete</button>
+                </div>
+              `;
+            allSubmissionsListContainer.appendChild(resultItem);
+          });
+        }
+        console.log(
+          `✅ Student exam submissions loaded successfully. Total: ${submissions.length}`
+        );
+      }
+
+      /**
+       * Stores the selected student's exam results in localStorage and redirects to score.html
+       * to display the results section directly.
+       * @param {number} index - The index of the submission in the main submissions array.
+       */
+      function viewStudentExamResults(index) {
+        let storedSubmissions = localStorage.getItem("examSubmissions");
+        let submissions = storedSubmissions
+          ? JSON.parse(storedSubmissions)
+          : [];
+
+        if (index >= 0 && index < submissions.length) {
+          const selectedSubmission = submissions[index];
+          // Store the entire submission object to be displayed by score.html
+          localStorage.setItem(
+            "lastExamSubmissionDisplay",
+            JSON.stringify(selectedSubmission)
+          );
+          window.location.href = "score.html"; // Redirect to the score page
+        } else {
+          console.error(
+            "Attempted to view exam results for invalid index:",
+            index
+          );
+          showMessageBox(
+            "Error",
+            "Could not find the selected exam results data."
+          );
+        }
+      }
+
+      /**
+       * Stores the selected student's submission data for proctoring report in localStorage
+       * and redirects to report_details.html.
+       * @param {number} index - The index of the submission in the main submissions array.
+       */
+      function viewStudentProctoringReport(index) {
+        let storedSubmissions = localStorage.getItem("examSubmissions");
+        let submissions = storedSubmissions
+          ? JSON.parse(storedSubmissions)
+          : [];
+
+        if (index >= 0 && index < submissions.length) {
+          const selectedSubmission = submissions[index];
+          // Store the entire submission object to be displayed by report_details.html
+          localStorage.setItem(
+            "currentReportSubmission",
+            JSON.stringify(selectedSubmission)
+          );
+          window.location.href = "report_details.html"; // Redirect to the report details page
+        } else {
+          console.error(
+            "Attempted to view proctoring report for invalid index:",
+            index
+          );
+          showMessageBox(
+            "Error",
+            "Could not find the selected proctoring report data."
+          );
+        }
+      }
+
+      /**
+       * Prompts the user for confirmation before deleting a submission.
+       * @param {number} index - The index of the submission to delete.
+       */
+      function promptDeleteConfirmation(index) {
+        currentDeleteIndex = index; // Store the index globally
+        showMessageBox(
+          "Confirm Deletion",
+          "Are you sure you want to delete this exam submission? This action cannot be undone.",
+          true, // isConfirm = true
+          executeDeleteSubmission // Callback for confirmation
+        );
+      }
+
+      /**
+       * Executes the deletion of a specific exam submission. This is called by the confirmation modal.
+       */
+      function executeDeleteSubmission() {
+        if (currentDeleteIndex === -1) {
+          console.warn(
+            "executeDeleteSubmission called with invalid currentDeleteIndex (likely reset prematurely)."
+          );
+          showMessageBox(
+            "Error",
+            "Deletion failed: Invalid submission selected. Please try again."
+          );
+          return;
+        }
+
+        let storedSubmissions = localStorage.getItem("examSubmissions");
+        let submissions = storedSubmissions
+          ? JSON.parse(storedSubmissions)
+          : [];
+
+        console.log("Before deletion, submissions:", submissions); // Log before deletion
+
+        if (
+          currentDeleteIndex >= 0 &&
+          currentDeleteIndex < submissions.length
+        ) {
+          // Remove the submission at the stored index
+          submissions.splice(currentDeleteIndex, 1);
+          // Save the updated array back to localStorage
+          localStorage.setItem("examSubmissions", JSON.stringify(submissions));
+          console.log(
+            `✅ Submission at index ${currentDeleteIndex} deleted from localStorage.`
+          );
+          console.log(
+            "After deletion, updated submissions in localStorage:",
+            localStorage.getItem("examSubmissions")
+          ); // Verify localStorage content
+
+          showMessageBox("Success", "Exam submission deleted successfully.");
+          loadSubmissions(); // Reload the list to reflect the deletion
+        } else {
+          console.error(
+            "Attempted to delete submission with invalid index after confirmation:",
+            currentDeleteIndex
+          );
+          showMessageBox("Error", "Could not delete the selected submission.");
+        }
+        currentDeleteIndex = -1; // Reset AFTER all operations are done
+      }
+    </script>
+  </body>
+</html>

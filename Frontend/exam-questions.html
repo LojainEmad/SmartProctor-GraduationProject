@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exam Page</title>
+    <style>
+      body {
+        font-family: "Inter", Arial, sans-serif; /* Using Inter font as recommended */
+        background-color: #f8f9fa;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        box-sizing: border-box;
+      }
+      .container {
+        max-width: 800px;
+        width: 100%;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin: 20px auto;
+        box-sizing: border-box;
+      }
+      h2 {
+        color: #333;
+        margin-bottom: 20px;
+      }
+      button {
+        background: #003366;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        margin: 10px 5px;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+      button:hover {
+        background: darkblue;
+        transform: translateY(-2px);
+      }
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+      }
+      .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        max-width: 500px;
+        width: 90%;
+        text-align: left;
+        position: relative;
+        overflow-y: auto; /* Allow scrolling for many options */
+        max-height: 90vh; /* Limit modal height */
+      }
+      .modal-content label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #555;
+      }
+      .modal-content input[type="text"] {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+      .option-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        gap: 10px;
+      }
+      .option-group input[type="radio"] {
+        margin-right: 5px;
+        flex-shrink: 0; /* Prevent shrinking */
+      }
+      .option-group input[type="text"] {
+        flex-grow: 1;
+        margin-bottom: 0; /* Remove bottom margin here */
+      }
+      .question-list {
+        margin-top: 20px;
+        text-align: left;
+      }
+      .question-item {
+        background: #ddeeff;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border-left: 5px solid #003366;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .question-item strong {
+        color: #333;
+      }
+      .question-item ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 10px;
+      }
+      .question-item li {
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+      }
+      .question-item input[type="radio"] {
+        margin-right: 8px;
+      }
+      .question-item button {
+        align-self: flex-end; /* Align delete button to the right */
+        background-color: #dc3545; /* Red for delete */
+      }
+      .question-item button:hover {
+        background-color: #c82333;
+      }
+
+      /* Message Box Styling */
+      .message-box-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+      .message-box-content {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 350px;
+        width: 90%;
+      }
+      .message-box-content h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      .message-box-content p {
+        margin-bottom: 20px;
+        color: #666;
+      }
+      .message-box-content button {
+        background: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+      }
+      .message-box-content button:hover {
+        background: #0056b3;
+      }
+      /* New styles for question type selection */
+      .question-type-selection {
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .question-type-selection label {
+        display: inline-block;
+        margin-right: 15px;
+        font-weight: normal;
+      }
+      .question-type-selection input[type="radio"] {
+        margin-right: 5px;
+      }
+      .text-answer-group {
+        margin-top: 15px;
+        display: none; /* Hidden by default */
+      }
+      .text-answer-group textarea {
+        width: calc(100% - 20px);
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+        min-height: 80px;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 600px) {
+        .container,
+        .modal-content {
+          margin: 10px;
+          padding: 15px;
+        }
+        .modal-content input[type="text"],
+        .modal-content textarea {
+          width: calc(100% - 10px);
+        }
+        button {
+          padding: 8px 15px;
+          font-size: 0.9em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 id="examHeader">Exam Questions</h2>
+      <div class="question-list" id="questionList">
+        <div id="questionsContainer"></div>
+        <p id="noQuestionsMessage">No questions added.</p>
+      </div>
+      <button onclick="openModal()">Add Question</button>
+      <!-- Done button added here -->
+      <button class="btn btn-primary" onclick="goToHomePage()">Done</button>
+    </div>
+
+    <!-- Modal for Adding Questions -->
+    <div class="modal" id="questionModal">
+      <div class="modal-content">
+        <h2>Add New Question</h2>
+        <label for="questionInput">Question:</label>
+        <input
+          type="text"
+          id="questionInput"
+          placeholder="Enter Question"
+        /><br /><br />
+
+        <div class="question-type-selection">
+          <label>Question Type:</label>
+          <input
+            type="radio"
+            id="mcqType"
+            name="questionType"
+            value="mcq"
+            checked
+            onchange="toggleQuestionType()"
+          />
+          <label for="mcqType">Multiple Choice</label>
+          <input
+            type="radio"
+            id="textType"
+            name="questionType"
+            value="text"
+            onchange="toggleQuestionType()"
+          />
+          <label for="textType">Text Answer</label>
+        </div>
+
+        <div id="mcqOptionsSection">
+          <label>Answer Options:</label>
+          <div id="optionsContainer">
+            <!-- Options will be added here dynamically -->
+          </div>
+          <button onclick="addOption()">Add Option</button><br /><br />
+        </div>
+
+        <div id="textAnswerSection" class="text-answer-group">
+          <label for="correctTextAnswerInput">Correct Answer:</label>
+          <textarea
+            id="correctTextAnswerInput"
+            placeholder="Enter the exact correct answer for text questions"
+          ></textarea
+          ><br /><br />
+        </div>
+
+        <button onclick="closeModal()">Cancel</button>
+        <button onclick="addQuestion()">Add</button>
+      </div>
+    </div>
+
+    <!-- Custom Message Box -->
+    <div class="message-box-overlay" id="messageBoxOverlay">
+      <div class="message-box-content">
+        <h3 id="messageBoxTitle"></h3>
+        <p id="messageBoxText"></p>
+        <button onclick="closeMessageBox()">OK</button>
+      </div>
+    </div>
+
+    <script>
+      // Function to display a custom message box
+      function showMessageBox(title, message) {
+        document.getElementById("messageBoxTitle").innerText = title;
+        document.getElementById("messageBoxText").innerText = message;
+        document.getElementById("messageBoxOverlay").style.display = "flex";
+      }
+
+      // Function to close the custom message box
+      function closeMessageBox() {
+        document.getElementById("messageBoxOverlay").style.display = "none";
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Retrieve and set the exam title from local storage if available
+        const title = localStorage.getItem("examTitle");
+        if (title) {
+          document.getElementById("examHeader").innerText = `Exam: ${title}`;
+        }
+        // Load existing questions when the page loads
+        loadQuestions();
+      });
+
+      // --- Modal Functions ---
+
+      /**
+       * Opens the modal for adding a new question.
+       * Clears previous inputs and ensures at least one option field is present.
+       */
+      function openModal() {
+        document.getElementById("questionModal").style.display = "flex"; // Use flex for centering
+        document.getElementById("questionInput").value = ""; // Clear previous question input
+        document.getElementById("mcqType").checked = true; // Default to MCQ
+        document.getElementById("correctTextAnswerInput").value = ""; // Clear text answer
+
+        // Initialize options for MCQ and hide text answer
+        document.getElementById("optionsContainer").innerHTML = ""; // Clear all previous options
+        addOption(); // Add one initial option input field for MCQ
+        toggleQuestionType(); // Ensure correct sections are shown/hidden
+      }
+
+      /**
+       * Toggles the visibility of MCQ options and Text Answer input based on selected question type.
+       */
+      function toggleQuestionType() {
+        const mcqSection = document.getElementById("mcqOptionsSection");
+        const textSection = document.getElementById("textAnswerSection");
+        const isMCQ = document.getElementById("mcqType").checked;
+
+        if (isMCQ) {
+          mcqSection.style.display = "block";
+          textSection.style.display = "none";
+        } else {
+          mcqSection.style.display = "none";
+          textSection.style.display = "block";
+        }
+      }
+
+      /**
+       * Closes the modal for adding a new question.
+       */
+      function closeModal() {
+        document.getElementById("questionModal").style.display = "none";
+      }
+
+      /**
+       * Adds a new option input field with a radio button for selecting the correct answer.
+       * All radio buttons within the modal will share the same 'name' attribute
+       * to ensure only one can be selected as 'correct'.
+       */
+      let optionCounter = 0; // To ensure unique IDs for accessibility
+      function addOption() {
+        const container = document.getElementById("optionsContainer");
+        const div = document.createElement("div");
+        div.className = "option-group"; // Use a class for styling flex layout
+        const optionId = `option-${optionCounter++}`; // Unique ID for radio button and label
+
+        div.innerHTML = `
+          <input type="radio" id="${optionId}" name="correctOption" class="correctRadio">
+          <label for="${optionId}" style="margin-bottom: 0;">Option:</label>
+          <input type="text" class="optionInput" placeholder="Enter option text">
+        `;
+        container.appendChild(div);
+      }
+
+      // --- Local Storage Data Operations ---
+
+      /**
+       * Gathers data from the modal, adds a new question to local storage,
+       * and then reloads the displayed questions.
+       */
+      function addQuestion() {
+        const questionInput = document.getElementById("questionInput");
+        const questionText = questionInput.value.trim();
+        const isMCQ = document.getElementById("mcqType").checked;
+        let questionData = { question: questionText };
+
+        // Validate question text
+        if (!questionText) {
+          showMessageBox("Error", "Please enter a question!");
+          return;
+        }
+
+        if (isMCQ) {
+          // Handle Multiple Choice Question
+          let options = [];
+          let correctOptionCount = 0;
+
+          document.querySelectorAll(".option-group").forEach((optionGroup) => {
+            let optionInput = optionGroup.querySelector(".optionInput");
+            let correctRadio = optionGroup.querySelector(".correctRadio");
+
+            let optionText = optionInput.value.trim();
+            let isCorrect = correctRadio.checked;
+
+            if (optionText) {
+              options.push({ text: optionText, correct: isCorrect });
+              if (isCorrect) {
+                correctOptionCount++;
+              }
+            }
+          });
+
+          if (options.length === 0) {
+            showMessageBox("Error", "Please add at least one answer option!");
+            return;
+          }
+          if (correctOptionCount === 0) {
+            showMessageBox("Error", "Please select one correct answer!");
+            return;
+          }
+          if (correctOptionCount > 1) {
+            showMessageBox("Error", "Please select only one correct answer!");
+            return;
+          }
+          questionData.type = "mcq";
+          questionData.options = options;
+        } else {
+          // Handle Text Answer Question
+          const correctTextAnswerInput = document.getElementById(
+            "correctTextAnswerInput"
+          );
+          const correctAnswerText = correctTextAnswerInput.value.trim();
+
+          if (!correctAnswerText) {
+            showMessageBox(
+              "Error",
+              "Please enter the correct answer for the text question!"
+            );
+            return;
+          }
+          questionData.type = "text";
+          questionData.correctAnswer = correctAnswerText;
+        }
+
+        let storedQuestions = localStorage.getItem("questions");
+        let questions = [];
+
+        try {
+          // Parse existing questions or initialize an empty array
+          questions = storedQuestions ? JSON.parse(storedQuestions) : [];
+          if (!Array.isArray(questions)) throw new Error("Corrupted data");
+        } catch (error) {
+          console.error("Error reading questions from localStorage:", error);
+          showMessageBox(
+            "Data Error",
+            "Could not load existing questions. Starting fresh."
+          );
+          questions = []; // Reset if data is corrupted
+        }
+
+        // Add the new question
+        questions.push(questionData);
+        localStorage.setItem("questions", JSON.stringify(questions));
+
+        console.log("✅ Question added successfully:", questionData);
+        loadQuestions(); // Reload questions to display the new one
+        closeModal(); // Close the modal
+      }
+
+      /**
+       * Loads questions from local storage and displays them on the page.
+       * Renders options as radio buttons with the correct one checked and disabled for MCQ.
+       * Renders correct answer as text for Text questions.
+       */
+      function loadQuestions() {
+        let questionsContainer = document.getElementById("questionsContainer");
+        let noQuestionsMessage = document.getElementById("noQuestionsMessage");
+
+        if (!questionsContainer) {
+          console.error("❌ ERROR: 'questionsContainer' not found!");
+          return;
+        }
+
+        questionsContainer.innerHTML = ""; // Clear existing displayed questions
+
+        let storedQuestions = localStorage.getItem("questions");
+        let questions = [];
+
+        try {
+          questions = storedQuestions ? JSON.parse(storedQuestions) : [];
+          if (!Array.isArray(questions)) throw new Error("Corrupted data");
+        } catch (error) {
+          console.error("⚠️ Corrupt data in localStorage. Resetting...");
+          localStorage.removeItem("questions"); // Clear corrupted data
+          questions = []; // Ensure questions is an array
+          showMessageBox(
+            "Data Issue",
+            "Corrupted question data found and reset. Please re-add questions."
+          );
+        }
+
+        if (questions.length === 0) {
+          noQuestionsMessage.style.display = "block"; // Show 'no questions' message
+          return;
+        } else {
+          noQuestionsMessage.style.display = "none"; // Hide 'no questions' message
+        }
+
+        questions.forEach((qItem, index) => {
+          // Default to 'mcq' for older questions without a 'type' property
+          const questionType = qItem.type || "mcq";
+
+          let questionElement = document.createElement("div");
+          questionElement.className = "question-item"; // Add a class for styling
+
+          let contentHtml = `<p><strong>Q${index + 1}:</strong> ${
+            qItem.question
+          }</p>`;
+
+          if (questionType === "mcq") {
+            // Basic validation for MCQ question structure
+            if (!qItem.options || !Array.isArray(qItem.options)) {
+              console.warn(
+                `⚠️ Invalid MCQ question format at index ${index}:`,
+                qItem
+              );
+              contentHtml += `<p style="color: red;">Error: Invalid Multiple Choice Question format.</p>`;
+            } else {
+              contentHtml += `
+                    <ul>
+                        ${qItem.options
+                          .map(
+                            (opt, optIndex) => `
+                                <li>
+                                    <input type="radio" id="q${index}-opt${optIndex}" name="question-${index}" ${
+                              opt.correct ? "checked" : ""
+                            } disabled>
+                                    <label for="q${index}-opt${optIndex}">${
+                              opt.text
+                            }</label>
+                                </li>`
+                          )
+                          .join("")}
+                    </ul>
+                `;
+            }
+          } else if (questionType === "text") {
+            // Basic validation for Text question structure
+            if (typeof qItem.correctAnswer !== "string") {
+              console.warn(
+                `⚠️ Invalid Text question format at index ${index}:`,
+                qItem
+              );
+              contentHtml += `<p style="color: red;">Error: Invalid Text Question format.</p>`;
+            } else {
+              contentHtml += `
+                    <p><strong>Correct Answer:</strong></p>
+                    <textarea disabled style="width: 100%; min-height: 50px; padding: 8px; border: 1px solid #ccc; border-radius: 4px; background-color: #f0f0f0;">${qItem.correctAnswer}</textarea>
+                `;
+            }
+          } else {
+            console.warn(
+              `⚠️ Unknown question type '${questionType}' at index ${index}:`,
+              qItem
+            );
+            contentHtml += `<p style="color: red;">Error: Unknown Question Type.</p>`;
+          }
+
+          questionElement.innerHTML = `
+            ${contentHtml}
+            <button onclick="deleteQuestion(${index})">Delete</button>
+          `;
+          questionsContainer.appendChild(questionElement);
+        });
+
+        console.log("✅ Questions loaded successfully!");
+      }
+
+      /**
+       * Redirects the user to the instructor dashboard.
+       */
+      function goToHomePage() {
+        window.location.href = "instructor_dashboard.html";
+      }
+
+      /**
+       * Deletes a question from local storage by its index and reloads the displayed questions.
+       * @param {number} index - The index of the question to delete.
+       */
+      function deleteQuestion(index) {
+        let storedQuestions = localStorage.getItem("questions");
+        let questions = storedQuestions ? JSON.parse(storedQuestions) : [];
+
+        // Ensure the index is valid before attempting to delete
+        if (index >= 0 && index < questions.length) {
+          questions.splice(index, 1); // Remove the question at the given index
+          localStorage.setItem("questions", JSON.stringify(questions)); // Save updated array
+          loadQuestions(); // Reload questions to reflect the deletion
+          console.log(`✅ Question at index ${index} deleted.`);
+        } else {
+          console.warn(
+            `Attempted to delete question at invalid index: ${index}`
+          );
+        }
+      }
+    </script>
+  </body>
+</html>

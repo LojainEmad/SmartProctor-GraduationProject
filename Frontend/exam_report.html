@@ -1,0 +1,386 @@
+<!-- <!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Students Reports</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #f4f4f4;
+    }
+    .sidebar {
+      width: 250px;
+      background: #003366;
+      color: white;
+      padding: 20px;
+      position: fixed;
+      height: 100%;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .logo span {
+      color: orange;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      padding: 15px;
+      cursor: pointer;
+    }
+    .sidebar ul li:hover {
+      background: #005599;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 250px;
+      min-height: 100vh;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    nav {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    nav a.active {
+      color: orange;
+      border-bottom: 2px solid orange;
+    }
+    .profile-container {
+      display: flex;
+      align-items: center;
+    }
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid #003366;
+    }
+    .content {
+      padding: 20px;
+      margin-left: 100px;
+      flex: 1;
+    }
+    .content h1 {
+      font-size: 40px;
+      color: #003366;
+      font-weight: bold;
+      margin-bottom: 30px;
+      margin-left: -40px;
+    }
+    .report-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+    }
+    .report-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #003366;
+    }
+    .report-info {
+      flex: 1;
+    }
+    .report-info h4 {
+      margin: 0 0 10px 0;
+      font-size: 22px;
+      color: #003366;
+    }
+    .report-info a {
+      color: white;
+      background: #003366;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .report-info a:hover {
+      background: #005599;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      background: white;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+      margin-top: auto;
+      width: 100%;
+    }
+    footer span {
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">Smart.<span>Proctor</span></div>
+    <ul>
+      <a href="home.html" style="text-decoration: none; color: inherit">
+        <li><i class="fas fa-home"></i> Home</li>
+      </a>
+      <a href="reports.html" style="text-decoration: none; color: inherit">
+        <li><i class="fas fa-chart-bar"></i> Reports</li>
+      </a>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <nav>
+        <a href="home.html">Reports</a>
+      </nav>
+      <div class="profile-container">
+        <a href="profile.html">
+          <img src="images/global-admin-icon-color-outline-vector.jpg" alt="Profile" class="profile-pic" />
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1>Students Reports</h1>
+
+      <div class="report-card">
+        <img src="images/Lojain img.jpg" alt="Student Photo" />
+        <div class="report-info">
+          <h4>Lojain Emad</h4>
+          <a href="index.html">View Report</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>All Rights Reserved <span>Smart.Proctor</span> &copy; 2025</p>
+    </footer>
+  </div>
+</body>
+</html> -->
+
+
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Students Reports</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: #f4f4f4;
+    }
+    .sidebar {
+      width: 250px;
+      background: #003366;
+      color: white;
+      padding: 20px;
+      position: fixed;
+      height: 100%;
+    }
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .logo span {
+      color: orange;
+    }
+    .sidebar ul {
+      list-style: none;
+    }
+    .sidebar ul li {
+      padding: 15px;
+      cursor: pointer;
+    }
+    .sidebar ul li:hover {
+      background: #005599;
+    }
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 250px;
+      min-height: 100vh;
+    }
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 15px 20px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    nav {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+    }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      margin: 0 15px;
+      font-weight: bold;
+    }
+    nav a.active {
+      color: orange;
+      border-bottom: 2px solid orange;
+    }
+    .profile-container {
+      display: flex;
+      align-items: center;
+    }
+    .profile-pic {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      cursor: pointer;
+      border: 2px solid #003366;
+    }
+    .content {
+      padding: 20px;
+      margin-left: 100px;
+      flex: 1;
+    }
+    .content h1 {
+      font-size: 40px;
+      color: #003366;
+      font-weight: bold;
+      margin-bottom: 30px;
+      margin-left: -40px;
+    }
+    .report-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+    }
+    .report-card img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #003366;
+    }
+    .report-info {
+      flex: 1;
+    }
+    .report-info h4 {
+      margin: 0 0 10px 0;
+      font-size: 22px;
+      color: #003366;
+    }
+    .report-info a {
+      color: white;
+      background: #003366;
+      padding: 8px 16px;
+      border-radius: 5px;
+      text-decoration: none;
+    }
+    .report-info a:hover {
+      background: #005599;
+    }
+    footer {
+      text-align: center;
+      padding: 10px;
+      background: white;
+      box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+      margin-top: auto;
+      width: 100%;
+    }
+    footer span {
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div class="logo">Smart.<span>Proctor</span></div>
+    <ul>
+      <a href="home.html" style="text-decoration: none; color: inherit">
+        <li><i class="fas fa-home"></i> Home</li>
+      </a>
+      <a href="reports.html" style="text-decoration: none; color: inherit">
+        <li><i class="fas fa-chart-bar"></i> Reports</li>
+      </a>
+    </ul>
+  </div>
+
+  <div class="main-content">
+    <div class="topbar">
+      <nav>
+        <a href="home.html">Reports</a>
+      </nav>
+      <div class="profile-container">
+        <a href="profile.html">
+          <img src="images/global-admin-icon-color-outline-vector.jpg" alt="Profile" class="profile-pic" />
+        </a>
+      </div>
+    </div>
+
+    <div class="content">
+      <h1>Students Reports</h1>
+
+      <div class="report-card">
+        <img src="images/Lojain img.jpg" alt="Student Photo" />
+        <div class="report-info">
+          <h4>Lojain Emad</h4>
+          <a href="deepseek_html_20250421_6edf49.html">View Report</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>All Rights Reserved <span>Smart.Proctor</span> &copy; 2025</p>
+    </footer>
+  </div>
+</body>
+</html>

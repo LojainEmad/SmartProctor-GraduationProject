@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif; /* Consistent with your landing and register pages */
+        min-height: 100vh; /* Use min-height to ensure it takes full viewport height */
+        background: rgba(217, 238, 244, 255);
+        display: flex;
+        flex-direction: column; /* Changed to column to stack navbar and content */
+        justify-content: flex-start; /* Align items from the top */
+        align-items: center;
+        margin: 0;
+      }
+
+      /* Navbar styles - replicated from your landing page for consistency */
+      .navbar {
+        width: 100%; /* Make navbar span full width */
+        background-color: #f8f9fa !important; /* Light background for navbar */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+        padding-top: 0.8rem;
+        padding-bottom: 0.8rem;
+      }
+
+      .navbar-brand {
+        font-weight: 700;
+        color: #0056b3 !important; /* A professional blue */
+        font-size: 1.8em;
+      }
+
+      .navbar-nav .nav-link {
+        font-weight: 500;
+        color: #343a40 !important;
+        margin-right: 15px;
+        border-radius: 8px; /* Rounded corners for nav links */
+      }
+
+      .btn-primary-custom {
+        background-color: #007bff; /* Primary blue for CTA */
+        border-color: #007bff;
+        border-radius: 8px; /* Rounded corners */
+        padding: 10px 25px;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+        color: #fff; /* Ensure text color is white */
+        text-decoration: none; /* Remove underline for links acting as buttons */
+      }
+
+      .btn-primary-custom:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+
+      .navbar-toggler {
+        border-radius: 8px; /* Rounded corners for toggler */
+      }
+
+      .container {
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+        margin-top: 50px; /* Space below the navbar */
+        margin-bottom: 50px; /* Space above the bottom of the page */
+        width: 90%; /* Adjust width for better responsiveness */
+        max-width: 1300px; /* Limit max width */
+      }
+
+      .form-container {
+        padding: 130px;
+      }
+
+      .form-control {
+        border: 2px solid #ddd;
+        border-radius: 5px;
+        font-size: 16px;
+        transition: 0.3s;
+      }
+
+      .form-control:focus {
+        border-color: #005599;
+      }
+
+      .register-btn {
+        background: #003366;
+        color: white;
+        border: none;
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: 0.3s;
+      }
+
+      .register-btn:hover {
+        background: #0262b0;
+      }
+
+      .image-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0 10px 10px 0;
+      }
+
+      /* Custom Message Box Styling */
+      .message-box-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+      }
+      .message-box-content {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        max-width: 350px;
+        width: 90%;
+      }
+      .message-box-content h3 {
+        margin-top: 0;
+        color: #333;
+      }
+      .message-box-content p {
+        margin-bottom: 20px;
+        color: #666;
+      }
+      .message-box-content button {
+        background: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        transition: background 0.3s ease;
+        color: white; /* Ensure button text is white */
+        border: none; /* Remove default button border */
+      }
+      .message-box-content button:hover {
+        background: #0056b3;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 992px) {
+        .form-container {
+          padding: 30px; /* Reduce padding for smaller screens */
+        }
+        .container {
+          flex-direction: column; /* Stack columns on smaller screens */
+          margin-top: 30px; /* Adjust top margin for stacked layout */
+          width: 95%; /* Make container wider on small screens */
+        }
+        .image-container {
+          display: none !important; /* Hide image on smaller screens */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light py-3 shadow-sm">
+      <div class="container-fluid px-4">
+        <a
+          class="navbar-brand d-flex align-items-center gap-2"
+          href="index.html"
+        >
+          <img
+            src="D:\ForthYear\SmartProctor-GraduationProject\Frontend\images\WebLogo.png"
+            alt="Smart Proctor Logo"
+            class="rounded-circle"
+            style="width: 50px; height: 50px"
+          />
+          <span>Smart Proctor</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="home.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="home.html#features-section">Features</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-primary-custom ms-lg-3" href="register.html"
+                >Register</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container d-flex">
+      <div class="form-container col-md-6">
+        <h1>Welcome Back!</h1>
+        <p>Please select your role and enter credentials to proceed.</p>
+
+        <form id="loginForm">
+          <div class="mb-3">
+            <input
+              type="email"
+              id="email"
+              class="form-control"
+              placeholder="Email Address"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <input
+              type="password"
+              id="password"
+              class="form-control"
+              placeholder="Password"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label d-block text-start mb-2">Login as:</label>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="userRole"
+                id="roleStudent"
+                value="student"
+                checked
+              />
+              <label class="form-check-label" for="roleStudent">Student</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="userRole"
+                id="roleInstructor"
+                value="instructor"
+              />
+              <label class="form-check-label" for="roleInstructor"
+                >Instructor</label
+              >
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div>
+              <input type="checkbox" id="remember" />
+              <label for="remember">Remember me</label>
+            </div>
+            <a href="#" style="color: #065aae; text-decoration: none"
+              >Forgot password?</a
+            >
+          </div>
+
+          <button type="submit" class="register-btn mt-3">Login</button>
+
+          <p class="mt-3">
+            Don't have an account?
+            <a href="register.html">Create new account</a>
+          </p>
+        </form>
+      </div>
+
+      <div class="image-container col-md-6 d-none d-md-block">
+        <img
+          src="D:\ForthYear\SmartProctor-GraduationProject\Frontend\images\11683784_4794658.jpg"
+          alt="Login Illustration"
+        />
+      </div>
+    </div>
+
+    <div class="message-box-overlay" id="messageBoxOverlay">
+      <div class="message-box-content">
+        <h3 id="messageBoxTitle"></h3>
+        <p id="messageBoxText"></p>
+        <button onclick="closeMessageBox()">OK</button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // --- Custom Message Box Functions ---
+      function showMessageBox(title, message) {
+        document.getElementById("messageBoxTitle").innerText = title;
+        document.getElementById("messageBoxText").innerText = message;
+        document.getElementById("messageBoxOverlay").style.display = "flex";
+      }
+
+      function closeMessageBox() {
+        document.getElementById("messageBoxOverlay").style.display = "none";
+      }
+
+      document
+        .getElementById("loginForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Prevent page reload
+
+          let email = document.getElementById("email").value.trim();
+          let password = document.getElementById("password").value.trim();
+
+          // Get selected role
+          let selectedRoleInput = document.querySelector(
+            'input[name="userRole"]:checked'
+          );
+
+          // --- Validation checks ---
+          if (email === "" || password === "") {
+            showMessageBox(
+              "Login Error",
+              "Email and Password fields are required!"
+            );
+            return;
+          }
+
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            showMessageBox(
+              "Login Error",
+              "Please enter a valid email address (e.g., user@example.com)."
+            );
+            return;
+          }
+
+          if (!selectedRoleInput) {
+            showMessageBox(
+              "Selection Required",
+              "Please select your role (Student or Instructor)."
+            );
+            return;
+          }
+          let role = selectedRoleInput.value;
+
+          // --- LocalStorage Login Logic ---
+          let registeredUsers = [];
+          try {
+            const storedUsers = localStorage.getItem("registeredUsers");
+            if (storedUsers) {
+              registeredUsers = JSON.parse(storedUsers);
+              if (!Array.isArray(registeredUsers)) {
+                throw new Error("Stored users data is corrupted.");
+              }
+            }
+          } catch (e) {
+            console.error(
+              "Error parsing registered users from localStorage:",
+              e
+            );
+            showMessageBox(
+              "Data Error",
+              "Corrupted user data detected. Please try registering again."
+            );
+            localStorage.removeItem("registeredUsers"); // Clear corrupted data
+            return;
+          }
+
+          // Find if a user matches the credentials AND the selected role
+          const foundUser = registeredUsers.find(
+            (user) =>
+              user.email === email &&
+              user.password === password &&
+              user.role === role
+          );
+
+          if (foundUser) {
+            // Save logged-in user info to localStorage
+            localStorage.setItem("loggedInUserId", foundUser.id);
+            localStorage.setItem("loggedInUserRole", foundUser.role);
+            localStorage.setItem("loggedInUserEmail", foundUser.email);
+            localStorage.setItem("loggedInUserName", foundUser.username);
+            // This line ensures the profilePic from the found user is also stored in localStorage
+            localStorage.setItem(
+              "loggedInProfilePic",
+              foundUser.profilePic || ""
+            );
+
+            showMessageBox(
+              "Login Success",
+              `Logged in as ${foundUser.role}! Redirecting...`
+            );
+            setTimeout(() => {
+              if (foundUser.role === "student") {
+                window.location.href = "home.html"; // Student homepage
+              } else if (foundUser.role === "instructor") {
+                window.location.href = "instructor_dashboard.html"; // Instructor dashboard page
+              }
+            }, 1000);
+          } else {
+            showMessageBox(
+              "Login Failed",
+              "Invalid email, password, or role combination."
+            );
+          }
+        });
+    </script>
+  </body>
+</html>

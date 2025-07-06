@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile Page</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+
+    <style>
+      /* Universal box-sizing and font */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Inter", Arial, sans-serif; /* Changed to Inter for consistency */
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: #f4f4f4;
+        padding-left: 250px; /* Space for fixed sidebar */
+      }
+      .sidebar {
+        width: 250px;
+        background: #003366;
+        color: white;
+        padding: 20px;
+        position: fixed;
+        height: 100%;
+        left: 0; /* Positioned to the left */
+        top: 0;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .logo {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        text-align: center;
+        width: 100%;
+        padding-bottom: 15px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      }
+      .logo span {
+        color: orange;
+      }
+      .sidebar ul {
+        list-style: none;
+        padding: 0;
+        width: 100%;
+      }
+      .sidebar ul li {
+        padding: 15px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .sidebar ul li:hover {
+        background: #005599;
+      }
+      .sidebar a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        padding: 15px 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        width: 100%; /* Occupy full width of content area */
+      }
+      nav {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+      }
+      nav a {
+        text-decoration: none;
+        color: #333;
+        margin: 0 15px;
+        font-weight: bold;
+      }
+      nav a.active {
+        color: orange;
+        border-bottom: 2px solid orange;
+      }
+      .profile-container {
+        display: flex;
+        align-items: center;
+      }
+      .profile-pic {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%; /* Top profile picture remains circular */
+        object-fit: cover;
+        cursor: pointer;
+        border: 2px solid #003366;
+      }
+      .container {
+        width: 100%;
+        max-width: 900px; /* Adjusted max-width for overall content */
+        margin: 80px auto;
+        display: flex;
+        flex-wrap: wrap; /* Allow wrapping for responsiveness */
+        background: white;
+        padding: 30px; /* Increased padding */
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .image-container {
+        flex: 1;
+        min-width: 200px; /* Ensure image container doesn't get too small */
+        text-align: center;
+        padding-right: 20px;
+        border-right: 1px solid #eee; /* Separator line */
+        display: flex; /* Use flexbox for centering image vertically */
+        flex-direction: column; /* Stack image vertically if other elements are added */
+        justify-content: center; /* Center image vertically */
+        margin: auto; /* Auto margin top/bottom to help center it within flex parent */
+      }
+      .image-container img {
+        width: 200px; /* Increased width */
+        height: 280px; /* Increased height, greater than width */
+        object-fit: cover;
+        border-radius: 5px; /* Square with slight rounded corners */
+        border: 4px solid #003366; /* Accent border */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin: 0 auto; /* Center image horizontally within its flex container */
+      }
+      .info-container {
+        flex: 2;
+        min-width: 300px; /* Ensure info container doesn't get too small */
+        padding-left: 30px; /* Increased padding */
+      }
+      .info-container h2 {
+        color: #003366; /* Changed heading color for consistency */
+        margin-bottom: 20px;
+        font-size: 1.8em;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 10px;
+      }
+      .info-container p {
+        margin: 12px 0; /* More vertical spacing */
+        font-size: 1.1em;
+        color: #555;
+      }
+      .info-container strong {
+        color: #333;
+      }
+      .nav {
+        display: flex;
+        flex-direction: row; /* Buttons side-by-side */
+        margin-top: 30px;
+        gap: 15px; /* Space between buttons */
+        justify-content: flex-start;
+      }
+      .nav button {
+        padding: 10px 20px;
+        font-size: 1em;
+        border-radius: 8px;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+      .logout-button {
+        background-color: #dc3545; /* Red color for logout */
+        color: white;
+        border: none;
+        margin-top: 20px; /* Separate from other buttons */
+      }
+      .logout-button:hover {
+        background-color: #c82333;
+        transform: translateY(-2px);
+      }
+      footer {
+        text-align: center;
+        padding: 15px;
+        background: white;
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        margin-top: auto;
+        width: 100%;
+        color: #555;
+        font-size: 0.9em;
+      }
+      footer span {
+        color: orange;
+        font-weight: bold;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+        body {
+          padding-left: 0; /* Remove sidebar padding on small screens */
+          padding-bottom: 80px; /* Space for bottom sidebar */
+        }
+        .sidebar {
+          position: fixed;
+          bottom: 0;
+          top: auto;
+          left: 0;
+          width: 100%;
+          height: 80px;
+          flex-direction: row;
+          justify-content: space-around;
+          align-items: center;
+          border-radius: 0;
+          box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.1);
+          padding: 10px;
+          z-index: 1000;
+        }
+        .sidebar .logo {
+          display: none;
+        }
+        .sidebar ul {
+          flex-direction: row;
+          justify-content: space-around;
+          width: 100%;
+        }
+        .sidebar ul li {
+          padding: 5px 10px;
+          font-size: 0.8em;
+          flex-direction: column;
+          gap: 2px;
+          text-align: center;
+        }
+        .sidebar ul li i {
+          font-size: 1.2em;
+        }
+        .topbar {
+          margin-left: 0; /* Remove margin from topbar */
+        }
+        .container {
+          flex-direction: column; /* Stack image and info vertically */
+          align-items: center;
+          margin: 20px auto;
+          padding: 20px;
+        }
+        .image-container {
+          padding-right: 0;
+          border-right: none;
+          padding-bottom: 20px;
+          border-bottom: 1px solid #eee;
+          margin-bottom: 20px;
+        }
+        .image-container img {
+          width: 150px; /* Adjust size for mobile if needed */
+          height: 200px;
+        }
+        .info-container {
+          padding-left: 0;
+          text-align: center;
+          width: 100%; /* Take full width */
+        }
+        .info-container h2 {
+          text-align: center;
+        }
+        .info-container p {
+          text-align: center;
+        }
+        .nav {
+          justify-content: center; /* Center buttons */
+          flex-wrap: wrap; /* Allow buttons to wrap */
+        }
+        .logout-button {
+          margin-top: 15px; /* Adjust margin for mobile */
+          width: 80%; /* Make logout button wider on mobile */
+          max-width: 250px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Sidebar on the left -->
+    <div class="sidebar">
+      <div class="logo">Smart.<span>Proctor</span></div>
+      <ul>
+        <li>
+          <a href="home.html"> <i class="fas fa-home"></i> Home </a>
+        </li>
+        <li>
+          <a href="exam.html"> <i class="fas fa-book"></i> Available Exams </a>
+        </li>
+        <li>
+          <a href="reports.html"> <i class="fas fa-chart-bar"></i> Grades </a>
+        </li>
+        <!-- Add more navigation items here if needed -->
+      </ul>
+    </div>
+
+    <!-- Topbar for navigation and profile pic -->
+    <div class="topbar">
+      <nav>
+        <a href="exam.html">EXAMS</a>
+      </nav>
+      <div class="profile-container">
+        <a href="profile.html">
+          <img
+            id="topProfilePic"
+            src="https://placehold.co/40x40/cccccc/ffffff?text=User"
+            alt="Profile"
+            class="profile-pic"
+          />
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content: Profile Details -->
+    <div class="container">
+      <div class="image-container">
+        <img
+          id="mainProfilePic"
+          src="https://placehold.co/200x280/cccccc/ffffff?text=User"
+          alt="Profile Image"
+        />
+      </div>
+      <div class="info-container">
+        <h2>Personal Info</h2>
+        <p>
+          <strong>Username:</strong>
+          <span id="usernameDisplay">Loading...</span>
+        </p>
+        <p><strong>Email:</strong> <span id="emailDisplay">Loading...</span></p>
+        <p><strong>Role:</strong> <span id="roleDisplay">Loading...</span></p>
+        <p><strong>Status:</strong> Active</p>
+        <p><strong>Joined at:</strong> <span id="joinedAt">N/A</span></p>
+        <p><strong>Last Update:</strong> <span id="lastUpdate">N/A</span></p>
+        <div class="nav">
+          <button type="button" class="btn btn-outline-info">
+            Edit Profile
+          </button>
+          <button type="button" class="btn btn-outline-secondary">
+            Change Password
+          </button>
+        </div>
+        <button type="button" class="btn logout-button" onclick="logoutUser()">
+          Logout
+        </button>
+      </div>
+    </div>
+
+    <footer>
+      <p>All Rights Reserved <span>Smart.Proctor</span> &copy; 2025</p>
+    </footer>
+
+    <script>
+      // --- Logout Function ---
+      function logoutUser() {
+        localStorage.removeItem("loggedInUserId");
+        localStorage.removeItem("loggedInUserRole");
+        localStorage.removeItem("loggedInUserEmail");
+        localStorage.removeItem("loggedInUserName");
+        localStorage.removeItem("loggedInProfilePic"); // Clear the profile pic Base64 too
+        window.location.href = "index.html"; // Redirect to login page
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        // --- Retrieve User Data from LocalStorage ---
+        const userId = localStorage.getItem("loggedInUserId");
+        const userRole = localStorage.getItem("loggedInUserRole");
+        const userEmail = localStorage.getItem("loggedInUserEmail");
+        const userName = localStorage.getItem("loggedInUserName");
+        const profilePicBase64 = localStorage.getItem("loggedInProfilePic"); // This key is set during registration now
+
+        // --- Elements to Update ---
+        const usernameDisplay = document.getElementById("usernameDisplay");
+        const emailDisplay = document.getElementById("emailDisplay");
+        const roleDisplay = document.getElementById("roleDisplay");
+        const mainProfilePic = document.getElementById("mainProfilePic");
+        const topProfilePic = document.getElementById("topProfilePic");
+        const joinedAtSpan = document.getElementById("joinedAt");
+        const lastUpdateSpan = document.getElementById("lastUpdate");
+
+        // --- Check if user is logged in, otherwise redirect ---
+        if (!userId || !userRole || !userName || !userEmail) {
+          console.warn(
+            "User not logged in or profile data missing. Redirecting to login."
+          );
+          logoutUser(); // Clear any partial data and redirect
+          return; // Stop further execution
+        }
+
+        // --- Populate Profile Info ---
+        usernameDisplay.textContent = userName;
+        emailDisplay.textContent = userEmail;
+        roleDisplay.textContent =
+          userRole.charAt(0).toUpperCase() + userRole.slice(1); // Capitalize role
+
+        // Set dummy joined/last updated dates (you'd get these from a real user database)
+        const now = new Date().toLocaleString();
+        joinedAtSpan.textContent = now;
+        lastUpdateSpan.textContent = now;
+
+        // --- Display Profile Picture ---
+        if (
+          profilePicBase64 &&
+          profilePicBase64 !== "null" &&
+          profilePicBase64 !== ""
+        ) {
+          // Check if it's not null/empty string
+          mainProfilePic.src = profilePicBase64;
+          topProfilePic.src = profilePicBase64;
+        } else {
+          // Use default placeholder if no image is available
+          mainProfilePic.src =
+            "https://placehold.co/200x280/cccccc/ffffff?text=User"; // Updated placeholder for square
+          topProfilePic.src =
+            "https://placehold.co/40x40/cccccc/ffffff?text=User";
+        }
+      });
+    </script>
+  </body>
+</html>
