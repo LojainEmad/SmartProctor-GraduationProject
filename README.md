@@ -3,7 +3,6 @@
 ## 📽️ Demo Video
 
 [▶️ Watch the Demo](https://drive.google.com/file/d/1BuWrTff6YPKgqpXINc5HhNJJM437ftri/view?usp=drive_link)  
-*(Replace `YOUR_VIDEO_ID` with the actual ID from your Google Drive shareable link)*
 
 ---
 
