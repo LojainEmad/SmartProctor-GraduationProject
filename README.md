@@ -107,12 +107,3 @@ The system operates in real time at **12–20 FPS**, with minimal latency even w
 | Object Detection     | YOLOv8 (custom-trained) |
 | AI Text Detection    | Fine-tuned DistilBERT |
 
----
-
-## ⚙️ Installation & Setup
-
-> 📝 *Note: Detailed setup steps may vary based on your environment.*
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/LojainEmad/SmartProctor-GraduationProject.git
